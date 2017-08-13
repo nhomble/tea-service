@@ -1,2 +1,2 @@
-# tea-service
+# org.tea-service
 teaching app
