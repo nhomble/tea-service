@@ -1,0 +1,31 @@
+{
+  "name": "Addition",
+  "functionName": "addition",
+  "language": "java",
+  "arguments": [
+    {
+      "name": "x",
+      "datatype": "integer"
+    },
+    {
+      "name": "y",
+      "datatype": "integer"
+    }
+  ],
+  "tests": [
+    {
+      "in": [
+        "0",
+        "0"
+      ],
+      "out": "0"
+    },
+    {
+      "in": [
+        "-1",
+        "1"
+      ],
+      "out": "0"
+    }
+  ]
+}
