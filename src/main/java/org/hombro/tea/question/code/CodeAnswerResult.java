@@ -6,13 +6,13 @@ import java.util.List;
  * Created by nicolas on 8/13/2017.
  */
 public class CodeAnswerResult {
-    private List<Boolean> results;
+    private List<TestCaseResult> results;
 
-    public List<Boolean> getResults(){
+    public List<TestCaseResult> getResults(){
         return results;
     }
 
-    public CodeAnswerResult setResults(List<Boolean> results){
+    public CodeAnswerResult setResults(List<TestCaseResult> results){
         this.results = results;
         return this;
     }

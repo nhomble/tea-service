@@ -11,18 +11,21 @@
   ],
   "tests": [
     {
+      "visibility": "public",
       "in": [
         "0"
       ],
       "out": "1"
     },
     {
+      "visibility": "public",
       "in": [
         "0"
       ],
       "out": "1"
     },
     {
+      "visibility": "public",
       "in": [
         "5"
       ],

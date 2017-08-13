@@ -25,7 +25,7 @@ public class QuestionProvider {
     }
 
     public CodeAnswerResult testAnswer(String content, Language language, String name) {
-        CodeAnswer answer = answer = Json.decodeValue(content, CodeAnswer.class)
+        CodeAnswer answer = Json.decodeValue(content, CodeAnswer.class)
                 .setCodingQuestion(getQuestionInfo(language, name));
         return answer.test();
     }

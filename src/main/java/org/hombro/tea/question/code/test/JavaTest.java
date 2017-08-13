@@ -2,7 +2,9 @@ package org.hombro.tea.question.code.test;
 
 import org.hombro.tea.question.code.CodeAnswer;
 import org.hombro.tea.question.code.CodeAnswerResult;
+import org.hombro.tea.question.code.TestCaseResult;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,7 +19,7 @@ public class JavaTest {
     }
 
     public CodeAnswerResult isCorrect(CodeAnswer answer) {
-        List<Boolean> results = answer.getCodingQuestion().getTests().stream().map(test -> {
+        List<TestCaseResult> results = answer.getCodingQuestion().getTests().stream().map(test -> {
             JavaSourceCode source = JavaSourceCode.createJavaSource(
                     answer.getCodingQuestion().getDatatype(),
                     answer.getCodingQuestion().getFunctionName(),
@@ -25,7 +27,11 @@ public class JavaTest {
                     answer.getCode(),
                     test.getIn()
             );
-            return source.getResult(test.getOut(), source);
+            List<String> argsList = (test.isPublic())? test.getIn() : Collections.emptyList();
+            return new TestCaseResult()
+                    .setResult(source.getResult(test.getOut(), source))
+                    .setPublic(test.isPublic())
+                    .setArgList(argsList);
         }).collect(Collectors.toList());
         return new CodeAnswerResult().setResults(results);
     }
