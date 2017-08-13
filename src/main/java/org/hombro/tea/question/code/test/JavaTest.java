@@ -37,8 +37,7 @@ public class JavaTest {
         return String.format("private Object %s(%s){%s}", methodName, args, methodBody);
     }
 
-    private String createJavaSource(List<Argument> args, String methodBody, List<String> parameters) {
-        String methodName = "testMethod" + ((int) (Math.random() * 100));
+    private String createJavaSource(String methodName, List<Argument> args, String methodBody, List<String> parameters) {
         String argString = args.stream().map(arg -> javaType(arg.getDatatype()) + " " + arg.getName()).collect(Collectors.joining(", "));
         String method = generateMethod(methodName, argString, methodBody);
         String paramString = String.join(", ", parameters);
@@ -67,7 +66,7 @@ public class JavaTest {
 
     public CodeAnswerResult isCorrect(CodeAnswer answer) {
         List<Boolean> results = answer.getCodingQuestion().getTests().stream().map(test -> {
-            String source = createJavaSource(answer.getCodingQuestion().getArguments(), answer.getCode(), test.getIn());
+            String source = createJavaSource(answer.getCodingQuestion().getFunctionName(), answer.getCodingQuestion().getArguments(), answer.getCode(), test.getIn());
             return getResult(test.getOut(), source);
         }).collect(Collectors.toList());
         return new CodeAnswerResult().setResults(results);
