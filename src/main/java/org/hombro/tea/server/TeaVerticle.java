@@ -80,7 +80,9 @@ public class TeaVerticle extends AbstractVerticle {
                     .putHeader("content-type", "text/plain")
                     .end("pong");
         });
-        router.route("/tea/app/*").handler(StaticHandler.create("org/hombro/tea/webroot"));
+        StaticHandler staticHandler = StaticHandler
+                .create("org/hombro/tea/webroot");
+        router.route("/tea/app/*").handler(staticHandler);
         router = questionRoutes("/tea/", router);
 
         vertx
