@@ -8,6 +8,7 @@ import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonArray;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
+import io.vertx.ext.web.handler.StaticHandler;
 import org.hombro.tea.question.QuestionProvider;
 import org.hombro.tea.question.code.CodeAnswerResult;
 import org.hombro.tea.question.code.CodingQuestion;
@@ -79,6 +80,7 @@ public class TeaVerticle extends AbstractVerticle {
                     .putHeader("content-type", "text/plain")
                     .end("pong");
         });
+        router.route("/tea/app/*").handler(StaticHandler.create("tea/webroot"));
         router = questionRoutes("/tea/", router);
 
         vertx
