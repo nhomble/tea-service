@@ -7,8 +7,9 @@ import org.hombro.tea.question.code.CodingQuestion;
 import org.hombro.tea.question.code.Language;
 import org.hombro.tea.util.IOHelper;
 
-import java.util.Arrays;
+import java.io.File;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by nicolas on 8/12/2017.
@@ -16,7 +17,10 @@ import java.util.List;
 public class QuestionProvider {
 
     public List<String> getQuestions() {
-        return Arrays.asList("test");
+        List<File> files = IOHelper.getQuestionsFromFile();
+        return files.stream()
+                .map(f -> f.getParentFile().getName() + "/" + f.getName().split("\\.")[0])
+                .collect(Collectors.toList());
     }
 
     public CodingQuestion getQuestionInfo(Language language, String name) {
