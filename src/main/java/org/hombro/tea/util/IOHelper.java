@@ -18,6 +18,6 @@ public class IOHelper {
     }
 
     public static String getQuestionFromFile(String path) {
-        return getFromFile("org/tea/question/" + path.toLowerCase() + ".json");
+        return getFromFile("org/hombro/tea/question/" + path.toLowerCase() + ".json");
     }
 }
