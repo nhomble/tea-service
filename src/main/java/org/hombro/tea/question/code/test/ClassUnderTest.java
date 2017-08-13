@@ -3,12 +3,12 @@ package org.hombro.tea.question.code.test;
 /**
  * Created by nicolas on 8/13/2017.
  */
-public class ClassUnderTest {
+public interface ClassUnderTest {
     /**
      * I am meant to be overwritten by the runtime compiler
      * @return
      */
-    public Object call(){
+    default Object call(){
         return null;
     }
 }

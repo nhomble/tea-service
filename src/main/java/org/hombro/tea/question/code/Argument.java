@@ -12,8 +12,8 @@ public class Argument {
         return this;
     }
 
-    public ArgumentType getDatatype(){
-        return ArgumentType.valueOf(datatype.toUpperCase());
+    public Datatype getDatatype(){
+        return Datatype.valueOf(datatype.toUpperCase());
     }
 
     public Argument setArgumentName(String name){

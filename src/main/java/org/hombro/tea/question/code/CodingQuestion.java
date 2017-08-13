@@ -10,6 +10,16 @@ public class CodingQuestion {
     private Language language;
     private List<Argument> arguments;
     private List<TestCase> tests;
+    private String datatype;
+
+    public Datatype getDatatype() {
+        return Datatype.valueOf(datatype.toUpperCase());
+    }
+
+    public CodingQuestion setDatatype(String datatype) {
+        this.datatype = datatype;
+        return this;
+    }
 
     public List<TestCase> getTests() {
         return tests;
