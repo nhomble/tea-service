@@ -26,6 +26,7 @@ public class TeaVerticle extends AbstractVerticle {
     private final int port;
 
     private BodyHandler bodyHandler;
+    private StaticHandler staticHandler;
     private QuestionProvider questionProvider;
 
     public TeaVerticle(int port) {
@@ -83,9 +84,17 @@ public class TeaVerticle extends AbstractVerticle {
         return router;
     }
 
+    private Router webAppRoutes(Router router){
+        router.route("/tea/app/*").handler(staticHandler);
+        router.route("/").handler(staticHandler);
+        return router;
+    }
+
     @Override
     public void start(Future<Void> fut) {
         bodyHandler = BodyHandler.create();
+        staticHandler = StaticHandler
+                .create("org/hombro/tea/webroot");
         Router router = Router
                 .router(vertx);
         router.route().handler(bodyHandler);
@@ -98,10 +107,8 @@ public class TeaVerticle extends AbstractVerticle {
                     .putHeader("content-type", "text/plain")
                     .end("pong");
         });
-        StaticHandler staticHandler = StaticHandler
-                .create("org/hombro/tea/webroot");
-        router.route("/tea/app/*").handler(staticHandler);
         router = questionRoutes("/tea/", router);
+        router = webAppRoutes(router);
 
         vertx
                 .createHttpServer()
