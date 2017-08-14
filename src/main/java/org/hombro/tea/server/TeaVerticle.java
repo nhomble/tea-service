@@ -6,6 +6,8 @@ import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonArray;
+import io.vertx.core.logging.Logger;
+import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.StaticHandler;
@@ -20,6 +22,7 @@ import java.util.List;
  * Created by nicolas on 8/12/2017.
  */
 public class TeaVerticle extends AbstractVerticle {
+    private final static Logger logger = LoggerFactory.getLogger(TeaVerticle.class);
     private BodyHandler bodyHandler;
     private QuestionProvider questionProvider;
 
@@ -29,6 +32,9 @@ public class TeaVerticle extends AbstractVerticle {
          */
         router.get(root + "questions").handler(routingContext -> {
             HttpServerResponse response = routingContext.response();
+
+            logger.info("Received request GET for all questions");
+
             List<String> questions = questionProvider.getQuestions();
             JsonArray array = new JsonArray(questions);
             response
@@ -43,6 +49,9 @@ public class TeaVerticle extends AbstractVerticle {
             HttpServerRequest request = routingContext.request();
             Language language = Language.valueOf(request.getParam("language").toUpperCase());
             String questionName = request.getParam("questionName");
+
+            logger.info("Received request to GET question for " + language + " " + questionName);
+
             CodingQuestion question = questionProvider.getQuestionInfo(language, questionName);
             HttpServerResponse response = routingContext.response();
             response
@@ -56,6 +65,9 @@ public class TeaVerticle extends AbstractVerticle {
             HttpServerRequest request = routingContext.request();
             Language language = Language.valueOf(request.getParam("language").toUpperCase());
             String questionName = request.getParam("questionName");
+
+            logger.info("Received request to POST answer to " + language + " " + questionName);
+
             CodeAnswerResult result = questionProvider.testAnswer(routingContext.getBodyAsString(), language, questionName);
             HttpServerResponse response = routingContext.response();
             response
