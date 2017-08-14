@@ -10,8 +10,18 @@ import io.vertx.core.logging.LoggerFactory;
 public class TeaRunner {
     private static final Logger logger = LoggerFactory.getLogger(TeaRunner.class);
     public static void main(String... args){
+        if(args.length != 1){
+            usage();
+        }
+
+        int port = Integer.valueOf(args[0]);
+
         Vertx vertx = Vertx.vertx();
-        vertx.deployVerticle(new TeaVerticle());
+        vertx.deployVerticle(new TeaVerticle(port));
         logger.info("TeaVerticle has been deployed");
+    }
+
+    private static void usage(){
+        throw new IllegalArgumentException("usage: TeaRunner [PORT]");
     }
 }
