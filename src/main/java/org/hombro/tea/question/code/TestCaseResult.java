@@ -9,6 +9,16 @@ public class TestCaseResult {
     private Boolean result;
     private Boolean isPublic;
     private List<String> argList;
+    private List<String> prints;
+
+    public List<String> getPrints() {
+        return prints;
+    }
+
+    public TestCaseResult setPrints(List<String> prints) {
+        this.prints = prints;
+        return this;
+    }
 
     public Boolean isPublic() {
         return isPublic;

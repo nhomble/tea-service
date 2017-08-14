@@ -15,10 +15,12 @@ public class JavaSourceCode {
 
     public final String source;
     public final String name;
+    public final ClassUnderTest classUnderTest;
 
-    private JavaSourceCode(String source, String name) {
+    private JavaSourceCode(String source, String name, ClassUnderTest classUnderTest) {
         this.source = source;
         this.name = name;
+        this.classUnderTest = classUnderTest;
     }
 
     private static String javaType(Datatype type) {
@@ -51,25 +53,26 @@ public class JavaSourceCode {
         String paramString = String.join(", ", parameters);
         String source = String.format("" +
                 "package %s;\n" +
-                "class %s implements %s{\n" +
+                "class %s extends %s{\n" +
                 "   %s\n" +
                 "\n" +
                 "   public %s call(){\n" +
                 "       return %s(%s);\n" +
                 "   }\n" +
                 "}", JavaSourceCode.class.getPackage().getName(), className, testingInterface, method, javaType(type), methodName, paramString);
-        return new JavaSourceCode(source, className);
-    }
 
-    public Boolean getResult(String out, JavaSourceCode code) {
+        String name = JavaSourceCode.class.getPackage().getName() + "." + className;
+        Class clazz = null;
         try {
-            String name = this.getClass().getPackage().getName() + "." + code.name;
-            Class clazz = CompilerUtils.CACHED_COMPILER.loadFromJava(name, code.source);
+            clazz = CompilerUtils.CACHED_COMPILER.loadFromJava(name, source);
             ClassUnderTest toTest = (ClassUnderTest) clazz.newInstance();
-            Object result = toTest.call();
-            return out.equals(result.toString());
+            return new JavaSourceCode(source, className, toTest);
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public Boolean getResult(String out) {
+        return out.equals(classUnderTest.call().toString());
     }
 }

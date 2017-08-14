@@ -29,9 +29,10 @@ public class JavaTest {
             );
             List<String> argsList = (test.isPublic())? test.getIn() : Collections.emptyList();
             return new TestCaseResult()
-                    .setResult(source.getResult(test.getOut(), source))
+                    .setResult(source.getResult(test.getOut()))
                     .setPublic(test.isPublic())
-                    .setArgList(argsList);
+                    .setArgList(argsList)
+                    .setPrints(source.classUnderTest.getPrints());
         }).collect(Collectors.toList());
         return new CodeAnswerResult().setResults(results);
     }
