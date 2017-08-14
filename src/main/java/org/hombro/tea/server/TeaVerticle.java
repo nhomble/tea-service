@@ -22,7 +22,10 @@ import java.util.List;
  * Created by nicolas on 8/12/2017.
  */
 public class TeaVerticle extends AbstractVerticle {
+    private final static int PORT = 5000;
+
     private final static Logger logger = LoggerFactory.getLogger(TeaVerticle.class);
+
     private BodyHandler bodyHandler;
     private QuestionProvider questionProvider;
 
@@ -101,7 +104,7 @@ public class TeaVerticle extends AbstractVerticle {
                 .createHttpServer()
                 .requestHandler(router::accept)
                 .listen(
-                        config().getInteger("http.port", 8080),
+                        config().getInteger("http.port", PORT),
                         result -> {
                             if (result.succeeded()) {
                                 fut.complete();
