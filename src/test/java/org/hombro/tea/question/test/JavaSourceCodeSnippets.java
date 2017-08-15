@@ -2,7 +2,7 @@ package org.hombro.tea.question.test;
 
 import org.hombro.tea.question.code.Argument;
 import org.hombro.tea.question.code.Datatype;
-import org.hombro.tea.question.code.test.JavaSourceCode;
+import org.hombro.tea.question.code.test.java.JavaSourceCode;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
