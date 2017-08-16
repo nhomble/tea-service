@@ -1,8 +1,9 @@
-package org.hombro.tea.question.code.test;
+package org.hombro.tea.question.code.test.java;
 
 import net.openhft.compiler.CompilerUtils;
 import org.hombro.tea.question.code.Argument;
 import org.hombro.tea.question.code.Datatype;
+import org.hombro.tea.question.code.test.ClassUnderTest;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -53,15 +54,15 @@ public class JavaSourceCode {
         String paramString = String.join(", ", parameters);
         String source = String.format("" +
                 "package %s;\n" +
-                "class %s extends %s{\n" +
+                "public class %s extends %s{\n" +
                 "   %s\n" +
                 "\n" +
                 "   public %s call(){\n" +
                 "       return %s(%s);\n" +
                 "   }\n" +
-                "}", JavaSourceCode.class.getPackage().getName(), className, testingInterface, method, javaType(type), methodName, paramString);
+                "}", ClassUnderTest.class.getPackage().getName(), className, testingInterface, method, javaType(type), methodName, paramString);
 
-        String name = JavaSourceCode.class.getPackage().getName() + "." + className;
+        String name = ClassUnderTest.class.getPackage().getName() + "." + className;
         Class clazz = null;
         try {
             clazz = CompilerUtils.CACHED_COMPILER.loadFromJava(name, source);

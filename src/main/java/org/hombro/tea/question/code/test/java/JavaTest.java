@@ -1,4 +1,4 @@
-package org.hombro.tea.question.code.test;
+package org.hombro.tea.question.code.test.java;
 
 import org.hombro.tea.question.code.CodeAnswer;
 import org.hombro.tea.question.code.CodeAnswerResult;

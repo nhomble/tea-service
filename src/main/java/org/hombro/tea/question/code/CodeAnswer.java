@@ -1,6 +1,6 @@
 package org.hombro.tea.question.code;
 
-import org.hombro.tea.question.code.test.JavaTest;
+import org.hombro.tea.question.code.test.java.JavaTest;
 
 /**
  * Created by nicolas on 8/12/2017.
