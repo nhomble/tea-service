@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 /**
  * Created by nicolas on 8/13/2017.
  */
-public abstract class ClassUnderTest {
+public class ClassUnderTest {
     private final List<String> prints = new ArrayList<>();
 
     /**

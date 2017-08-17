@@ -50,7 +50,7 @@ public class JavaSourceCode implements SourceCode {
         return "ClassUnderTest" + (int) (Math.random() * 100000); // TODO confirm if there is a better way;
     }
 
-    public static JavaSourceCode createJavaSource(Datatype type, String methodName, List<Argument> args, String methodBody, List<String> parameters) {
+    public static SourceCode createJavaSource(Datatype type, String methodName, List<Argument> args, String methodBody, List<String> parameters) {
         String className = className();
         String argString = args.stream().map(arg -> javaType(arg.getDatatype()) + " " + arg.getName()).collect(Collectors.joining(", "));
         String method = generateMethod(type, methodName, argString, methodBody);
@@ -75,17 +75,24 @@ public class JavaSourceCode implements SourceCode {
             ClassUnderTest toTest = (ClassUnderTest) clazz.newInstance();
             return new JavaSourceCode(source, className, toTest);
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-            throw new RuntimeException(e);
+            return new JavaSourceCode(source, className, new ClassUnderTest());
         }
     }
 
     @Override
     public TestResponseResult getResult(Object expected) {
         ClassUnderTestResponse response = classUnderTest.call();
+        if(!response.wasUnderstood())
+            return TestResponseResult.INVALID;
         if (response.didThrow())
             return TestResponseResult.THROW;
         else {
             return (response.getReturn().toString().equals(expected.toString())) ? TestResponseResult.SUCCESS : TestResponseResult.DIFFERENCE;
         }
+    }
+
+    @Override
+    public List<String> getPrints(){
+        return classUnderTest.getPrints();
     }
 }

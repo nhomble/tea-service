@@ -4,6 +4,7 @@ import org.hombro.tea.question.code.CodeAnswer;
 import org.hombro.tea.question.code.CodeAnswerResult;
 import org.hombro.tea.question.code.TestCaseResult;
 import org.hombro.tea.question.code.test.CodeTest;
+import org.hombro.tea.question.code.test.SourceCode;
 
 import java.util.Collections;
 import java.util.List;
@@ -21,7 +22,7 @@ public class JavaTest implements CodeTest {
     @Override
     public CodeAnswerResult isCorrect(CodeAnswer answer) {
         List<TestCaseResult> results = answer.getCodingQuestion().getTests().stream().map(test -> {
-            JavaSourceCode source = JavaSourceCode.createJavaSource(
+            SourceCode source = JavaSourceCode.createJavaSource(
                     answer.getCodingQuestion().getDatatype(),
                     answer.getCodingQuestion().getFunctionName(),
                     answer.getCodingQuestion().getArguments(),
@@ -33,7 +34,7 @@ public class JavaTest implements CodeTest {
                     .setResult(source.getResult(test.getOut()))
                     .setPublic(test.isPublic())
                     .setArgList(argsList)
-                    .setPrints(source.classUnderTest.getPrints());
+                    .setPrints(source.getPrints());
         }).collect(Collectors.toList());
         return new CodeAnswerResult().setResults(results);
     }

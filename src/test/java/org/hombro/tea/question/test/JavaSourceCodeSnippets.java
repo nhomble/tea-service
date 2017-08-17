@@ -2,6 +2,7 @@ package org.hombro.tea.question.test;
 
 import org.hombro.tea.question.code.Argument;
 import org.hombro.tea.question.code.Datatype;
+import org.hombro.tea.question.code.test.SourceCode;
 import org.hombro.tea.question.code.test.TestResponseResult;
 import org.hombro.tea.question.code.test.java.JavaSourceCode;
 import org.junit.Test;
@@ -43,6 +44,7 @@ public class JavaSourceCodeSnippets {
         List<Argument> addArguments = Arrays.asList(new Argument().setArgumentName("x").setArgumentType("Integer"), new Argument().setArgumentName("y").setArgumentType("Integer"));
         List<Argument> factorialArgs = Collections.singletonList(new Argument().setArgumentName("n").setArgumentType("Integer"));
         return Arrays.asList(new Object[][]{
+                {Datatype.INTEGER, "add", addArguments, "I am not java code", Arrays.asList("1", "1"), "2", TestResponseResult.INVALID},
                 {Datatype.INTEGER, "add", addArguments, "return x + y;", Arrays.asList("1", "1"), "2", TestResponseResult.SUCCESS},
                 {Datatype.INTEGER, "add", addArguments, "return x + y;", Arrays.asList("1", "2"), "3", TestResponseResult.SUCCESS},
                 {Datatype.INTEGER, "add", addArguments, "return x + x;", Arrays.asList("4", "1"), "8", TestResponseResult.SUCCESS},
@@ -56,7 +58,7 @@ public class JavaSourceCodeSnippets {
 
     @Test
     public void test() {
-        JavaSourceCode sourceCode = JavaSourceCode.createJavaSource(type, methodName, argumentList, solution, params);
+        SourceCode sourceCode = JavaSourceCode.createJavaSource(type, methodName, argumentList, solution, params);
         assertEquals(sourceCode.getResult(expected), testResponseResult);
     }
 }

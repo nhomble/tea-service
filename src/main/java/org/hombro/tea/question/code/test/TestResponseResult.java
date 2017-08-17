@@ -6,5 +6,6 @@ package org.hombro.tea.question.code.test;
 public enum TestResponseResult {
     SUCCESS,    // what you expect
     DIFFERENCE, // test ran, just equality difference
-    THROW       // exception thrown
+    THROW,      // exception thrown
+    INVALID     // could not interpret/compile
 }
