@@ -10,16 +10,21 @@ import java.util.stream.Collectors;
  */
 public abstract class ClassUnderTest {
     private final List<String> prints = new ArrayList<>();
+
     /**
      * I am meant to be overwritten by the runtime compiler
+     *
      * @return
      */
-    public Object call(){
-        return null;
+    public ClassUnderTestResponse call() {
+        return ClassUnderTestResponse.DEFAULT;
     }
 
-    public void print(Object... o){
+    public void print(Object... o) {
         prints.add(Arrays.stream(o).map(Object::toString).collect(Collectors.joining(" ")));
     }
-    public List<String> getPrints(){ return prints; }
+
+    public List<String> getPrints() {
+        return prints;
+    }
 }

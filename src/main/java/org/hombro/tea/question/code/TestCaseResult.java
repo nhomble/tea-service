@@ -1,12 +1,14 @@
 package org.hombro.tea.question.code;
 
+import org.hombro.tea.question.code.test.TestResponseResult;
+
 import java.util.List;
 
 /**
  * Created by nicolas on 8/13/2017.
  */
 public class TestCaseResult {
-    private Boolean result;
+    private TestResponseResult result;
     private Boolean isPublic;
     private List<String> argList;
     private List<String> prints;
@@ -29,11 +31,11 @@ public class TestCaseResult {
         return this;
     }
 
-    public Boolean getResult() {
+    public TestResponseResult getResult() {
         return result;
     }
 
-    public TestCaseResult setResult(Boolean result) {
+    public TestCaseResult setResult(TestResponseResult result) {
         this.result = result;
         return this;
     }
