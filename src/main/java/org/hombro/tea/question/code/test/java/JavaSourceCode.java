@@ -1,7 +1,6 @@
 package org.hombro.tea.question.code.test.java;
 
 import net.openhft.compiler.CompilerUtils;
-import org.hombro.tea.question.code.Argument;
 import org.hombro.tea.question.code.Datatype;
 import org.hombro.tea.question.code.test.ClassUnderTest;
 import org.hombro.tea.question.code.test.ClassUnderTestResponse;
@@ -9,7 +8,6 @@ import org.hombro.tea.question.code.test.SourceCode;
 import org.hombro.tea.question.code.test.TestResponseResult;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by nicolas on 8/13/2017.
@@ -42,18 +40,12 @@ public class JavaSourceCode implements SourceCode {
         }
     }
 
-    private static String generateMethod(Datatype type, String methodName, String args, String methodBody) {
-        return String.format("private %s %s(%s){%s}", javaType(type), methodName, args, methodBody);
-    }
-
     private static String className() {
         return "ClassUnderTest" + (int) (Math.random() * 100000); // TODO confirm if there is a better way;
     }
 
-    public static SourceCode createJavaSource(Datatype type, String methodName, List<Argument> args, String methodBody, List<String> parameters) {
+    public static SourceCode createJavaSource(String methodName, String method, List<String> parameters) {
         String className = className();
-        String argString = args.stream().map(arg -> javaType(arg.getDatatype()) + " " + arg.getName()).collect(Collectors.joining(", "));
-        String method = generateMethod(type, methodName, argString, methodBody);
         String paramString = String.join(", ", parameters);
         String source = String.format("" +
                 "package %s;\n" +
@@ -82,7 +74,7 @@ public class JavaSourceCode implements SourceCode {
     @Override
     public TestResponseResult getResult(Object expected) {
         ClassUnderTestResponse response = classUnderTest.call();
-        if(!response.wasUnderstood())
+        if (!response.wasUnderstood())
             return TestResponseResult.INVALID;
         if (response.didThrow())
             return TestResponseResult.THROW;
@@ -92,7 +84,7 @@ public class JavaSourceCode implements SourceCode {
     }
 
     @Override
-    public List<String> getPrints(){
+    public List<String> getPrints() {
         return classUnderTest.getPrints();
     }
 }

@@ -23,9 +23,7 @@ public class JavaTest implements CodeTest {
     public CodeAnswerResult isCorrect(CodeAnswer answer) {
         List<TestCaseResult> results = answer.getCodingQuestion().getTests().stream().map(test -> {
             SourceCode source = JavaSourceCode.createJavaSource(
-                    answer.getCodingQuestion().getDatatype(),
                     answer.getCodingQuestion().getFunctionName(),
-                    answer.getCodingQuestion().getArguments(),
                     answer.getCode(),
                     test.getIn()
             );

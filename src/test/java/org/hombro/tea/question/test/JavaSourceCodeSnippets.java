@@ -1,7 +1,5 @@
 package org.hombro.tea.question.test;
 
-import org.hombro.tea.question.code.Argument;
-import org.hombro.tea.question.code.Datatype;
 import org.hombro.tea.question.code.test.SourceCode;
 import org.hombro.tea.question.code.test.TestResponseResult;
 import org.hombro.tea.question.code.test.java.JavaSourceCode;
@@ -21,18 +19,14 @@ import static junit.framework.TestCase.assertEquals;
  */
 @RunWith(Parameterized.class)
 public class JavaSourceCodeSnippets {
-    private Datatype type;
     private String methodName;
-    private List<Argument> argumentList;
     private String solution;
     private List<String> params;
     private String expected;
     private TestResponseResult testResponseResult;
 
-    public JavaSourceCodeSnippets(Datatype type, String methodName, List<Argument> argumentList, String solution, List<String> params, String expected, TestResponseResult testResponseResult) {
-        this.type = type;
+    public JavaSourceCodeSnippets(String methodName, String solution, List<String> params, String expected, TestResponseResult testResponseResult) {
         this.methodName = methodName;
-        this.argumentList = argumentList;
         this.solution = solution;
         this.params = params;
         this.expected = expected;
@@ -41,24 +35,25 @@ public class JavaSourceCodeSnippets {
 
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
-        List<Argument> addArguments = Arrays.asList(new Argument().setArgumentName("x").setArgumentType("Integer"), new Argument().setArgumentName("y").setArgumentType("Integer"));
-        List<Argument> factorialArgs = Collections.singletonList(new Argument().setArgumentName("n").setArgumentType("Integer"));
+        String addFormat = "public int add(int x, int y){ %s }";
+        String factorialFormat = "public int factorial(int n){ %s }";
         return Arrays.asList(new Object[][]{
-                {Datatype.INTEGER, "add", addArguments, "I am not java code", Arrays.asList("1", "1"), "2", TestResponseResult.INVALID},
-                {Datatype.INTEGER, "add", addArguments, "return x + y;", Arrays.asList("1", "1"), "2", TestResponseResult.SUCCESS},
-                {Datatype.INTEGER, "add", addArguments, "return x + y;", Arrays.asList("1", "2"), "3", TestResponseResult.SUCCESS},
-                {Datatype.INTEGER, "add", addArguments, "return x + x;", Arrays.asList("4", "1"), "8", TestResponseResult.SUCCESS},
-                {Datatype.INTEGER, "add", addArguments, "return 0;", Arrays.asList("1", "1"), "2", TestResponseResult.DIFFERENCE},
-                {Datatype.INTEGER, "factorial", factorialArgs, "return ( n == 0 || n == 1 )? 1 : n * factorial( n - 1 );", Collections.singletonList("0"), "1", TestResponseResult.SUCCESS},
-                {Datatype.INTEGER, "factorial", factorialArgs, "return ( n == 0 || n == 1 )? 1 : n * factorial( n - 1 );", Collections.singletonList("1"), "1", TestResponseResult.SUCCESS},
-                {Datatype.INTEGER, "factorial", factorialArgs, "return ( n == 0 || n == 1 )? 1 : n * factorial( n - 1 );", Collections.singletonList("5"), "120", TestResponseResult.SUCCESS},
-                {Datatype.INTEGER, "factorial", factorialArgs, "throw new RuntimeException();", Collections.singletonList("5"), "120", TestResponseResult.THROW}
+                {"add", "I am not java code", Arrays.asList("1", "1"), "2", TestResponseResult.INVALID},
+                {"add", String.format(addFormat, "return x + y;"), Arrays.asList("1", "1"), "2", TestResponseResult.SUCCESS},
+                {"add", String.format(addFormat, "return x + y;"), Arrays.asList("1", "2"), "3", TestResponseResult.SUCCESS},
+                {"add", String.format(addFormat, "return x + x;"), Arrays.asList("4", "1"), "8", TestResponseResult.SUCCESS},
+                {"add", String.format(addFormat, "return 0;"), Arrays.asList("1", "1"), "2", TestResponseResult.DIFFERENCE},
+                {"factorial", String.format(factorialFormat, "return ( n == 0 || n == 1 )? 1 : n * factorial( n - 1 );"), Collections.singletonList("0"), "1", TestResponseResult.SUCCESS},
+                {"factorial", String.format(factorialFormat, "return ( n == 0 || n == 1 )? 1 : n * factorial( n - 1 );"), Collections.singletonList("1"), "1", TestResponseResult.SUCCESS},
+                {"factorial", String.format(factorialFormat, "return ( n == 0 || n == 1 )? 1 : n * factorial( n - 1 );"), Collections.singletonList("5"), "120", TestResponseResult.SUCCESS},
+                {"factorial", String.format(factorialFormat, "throw new RuntimeException();"), Collections.singletonList("5"), "120", TestResponseResult.THROW},
+                {"factorial", String.format(factorialFormat, "return ( n == 0 || n == 1 )? 1 : n * factorial( n - 1 );") + "private final Object randomField = null;", Collections.singletonList("5"), "120", TestResponseResult.SUCCESS},
         });
     }
 
     @Test
     public void test() {
-        SourceCode sourceCode = JavaSourceCode.createJavaSource(type, methodName, argumentList, solution, params);
+        SourceCode sourceCode = JavaSourceCode.createJavaSource(methodName, solution, params);
         assertEquals(sourceCode.getResult(expected), testResponseResult);
     }
 }
