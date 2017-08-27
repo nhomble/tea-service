@@ -39,6 +39,9 @@ public class JavaSourceCodeSnippets {
         String factorialFormat = "public int factorial(int n){ %s }";
         return Arrays.asList(new Object[][]{
                 {"add", "I am not java code", Arrays.asList("1", "1"), "2", TestResponseResult.INVALID},
+                {"add", String.format(addFormat, "System.exit(-1); return 0;"), Arrays.asList("1", "1"), "2", TestResponseResult.INVALID},
+
+
                 {"add", String.format(addFormat, "return x + y;"), Arrays.asList("1", "1"), "2", TestResponseResult.SUCCESS},
                 {"add", String.format(addFormat, "return x + y;"), Arrays.asList("1", "2"), "3", TestResponseResult.SUCCESS},
                 {"add", String.format(addFormat, "return x + x;"), Arrays.asList("4", "1"), "8", TestResponseResult.SUCCESS},
@@ -55,5 +58,6 @@ public class JavaSourceCodeSnippets {
     public void test() {
         SourceCode sourceCode = JavaSourceCode.createJavaSource(methodName, solution, params);
         assertEquals(sourceCode.getResult(expected), testResponseResult);
+        System.out.println("asd");
     }
 }

@@ -1,5 +1,6 @@
 package org.hombro.tea.question.code.test.java;
 
+import io.vertx.core.impl.verticle.CompilingClassLoader;
 import net.openhft.compiler.CompilerUtils;
 import org.hombro.tea.question.code.Datatype;
 import org.hombro.tea.question.code.test.ClassUnderTest;
@@ -49,10 +50,22 @@ public class JavaSourceCode implements SourceCode {
         String paramString = String.join(", ", parameters);
         String source = String.format("" +
                 "package %s;\n" +
+                "import java.security.Permission;\n" +
                 "public class %s extends %s{\n" +
+                "    private final SecurityManager realManager = new SecurityManager(){\n" +
+                "    public void checkPermission(Permission permission){\n" +
+                "            throw new RuntimeException(permission.getName());\n" +
+                "        }\n" +
+                "    };\n" +
+                "\n" +
+                "    public void guard(){\n" +
+                "        System.setSecurityManager(realManager);\n" +
+                "    }\n" +
+                "\n" +
                 "   %s\n" +
                 "\n" +
                 "   public ClassUnderTestResponse call(){\n" +
+                "       guard();" +
                 "       try {\n" +
                 "           return ClassUnderTestResponse.fromTest(%s(%s));\n" +
                 "       } catch (Exception e){\n" +
