@@ -58,6 +58,5 @@ public class JavaSourceCodeSnippets {
     public void test() {
         SourceCode sourceCode = JavaSourceCode.createJavaSource(methodName, solution, params);
         assertEquals(sourceCode.getResult(expected), testResponseResult);
-        System.out.println("asd");
     }
 }
