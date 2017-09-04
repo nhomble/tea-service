@@ -56,7 +56,7 @@ public class JvmSandbox {
                 tmp.delete();
                 return "";
             }
-
+            logger.info("code has compiled!");
             processBuilder = new ProcessBuilder("java", "-cp", classPath + ";" + tmp.getAbsolutePath(), className);
             logger.info("compile command: " + String.join(" ", processBuilder.command()));
             processBuilder.redirectErrorStream(true);
@@ -69,7 +69,8 @@ public class JvmSandbox {
             tmp.delete();
             return out;
         } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+            logger.info(e.getMessage());
+            return "";
         }
     }
 }
