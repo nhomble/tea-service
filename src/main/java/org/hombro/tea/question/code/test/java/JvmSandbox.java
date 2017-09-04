@@ -46,7 +46,8 @@ public class JvmSandbox {
             writer.write(code);
             writer.close();
             logger.info("wrote: " + source.getCanonicalPath());
-            ProcessBuilder processBuilder = new ProcessBuilder("javac", "-cp", classPath, source.getAbsolutePath());
+            ProcessBuilder processBuilder = new ProcessBuilder("javac", "-cp", classPath, source.getCanonicalPath());
+            logger.info("compile command: " + String.join(" ", processBuilder.command()));
             processBuilder.redirectErrorStream(true);
             String error = getOutput(processBuilder.start());
             if(!error.isEmpty()) {
@@ -57,6 +58,7 @@ public class JvmSandbox {
             }
 
             processBuilder = new ProcessBuilder("java", "-cp", classPath + ";" + tmp.getAbsolutePath(), className);
+            logger.info("compile command: " + String.join(" ", processBuilder.command()));
             processBuilder.redirectErrorStream(true);
             Process process = processBuilder.start();
             String out = getOutput(process);
