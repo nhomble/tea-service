@@ -46,7 +46,7 @@ public class JvmSandbox {
             writer.write(code);
             writer.close();
             logger.info("wrote: " + source.getCanonicalPath());
-            ProcessBuilder processBuilder = new ProcessBuilder("javac", "-cp", classPath, source.getCanonicalPath());
+            ProcessBuilder processBuilder = new ProcessBuilder("javac", "-cp", classPath, source.getAbsolutePath());
             logger.info("compile command: " + String.join(" ", processBuilder.command()));
             processBuilder.redirectErrorStream(true);
             String error = getOutput(processBuilder.start());
