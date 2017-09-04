@@ -69,7 +69,7 @@ public class JvmSandbox {
             tmp.delete();
             return out;
         } catch (IOException | InterruptedException e) {
-            logger.info(e.getMessage());
+            logger.info("Some exception: " + e.getMessage());
             return "";
         }
     }
