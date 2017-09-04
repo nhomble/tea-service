@@ -50,7 +50,7 @@ public class JvmSandbox {
             processBuilder.redirectErrorStream(true);
             String error = getOutput(processBuilder.start());
             if(!error.isEmpty()) {
-                System.err.print(error);
+                logger.error(error);
                 source.delete();
                 tmp.delete();
                 return "";
