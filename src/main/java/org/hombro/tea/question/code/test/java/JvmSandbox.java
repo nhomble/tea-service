@@ -45,12 +45,12 @@ public class JvmSandbox {
             FileWriter writer = new FileWriter(source);
             writer.write(code);
             writer.close();
-
+            logger.info("wrote: " + source.getCanonicalPath());
             ProcessBuilder processBuilder = new ProcessBuilder("javac", "-cp", classPath, source.getAbsolutePath());
             processBuilder.redirectErrorStream(true);
             String error = getOutput(processBuilder.start());
             if(!error.isEmpty()) {
-                logger.error(error);
+                logger.info(error);
                 source.delete();
                 tmp.delete();
                 return "";
