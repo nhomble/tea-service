@@ -1,5 +1,8 @@
 package org.hombro.tea.question.code.test.java;
 
+import io.vertx.core.logging.Logger;
+import io.vertx.core.logging.LoggerFactory;
+
 import java.io.*;
 import java.nio.file.Files;
 
@@ -7,6 +10,8 @@ import java.nio.file.Files;
  * Created by nicolas on 9/4/2017.
  */
 public class JvmSandbox {
+    private static final Logger logger = LoggerFactory.getLogger(JvmSandbox.class);
+
     private String separator = System.getProperty("file.separator");
     private String classPath = System.getProperty("java.class.path");
 
@@ -23,8 +28,10 @@ public class JvmSandbox {
     }
 
     public String run(String className, String code) {
+        logger.info(classPath);
         try {
             File tmp = Files.createTempDirectory("_delete_me_").toFile();
+            logger.info(tmp.getCanonicalPath());
             tmp.deleteOnExit();
             File source = new File(String.valueOf(tmp.getAbsoluteFile()) + separator +  className + ".java");
             source.deleteOnExit();
