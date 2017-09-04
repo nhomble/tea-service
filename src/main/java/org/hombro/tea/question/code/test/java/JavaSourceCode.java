@@ -1,13 +1,12 @@
 package org.hombro.tea.question.code.test.java;
 
-import io.vertx.core.impl.verticle.CompilingClassLoader;
-import net.openhft.compiler.CompilerUtils;
+import io.vertx.core.json.Json;
 import org.hombro.tea.question.code.Datatype;
-import org.hombro.tea.question.code.test.ClassUnderTest;
 import org.hombro.tea.question.code.test.ClassUnderTestResponse;
 import org.hombro.tea.question.code.test.SourceCode;
 import org.hombro.tea.question.code.test.TestResponseResult;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -15,15 +14,14 @@ import java.util.List;
  */
 public class JavaSourceCode implements SourceCode {
     private static final String testingInterface = "ClassUnderTest";
-
+    private final JvmSandbox jvmSandbox;
     public final String source;
     public final String name;
-    public final ClassUnderTest classUnderTest;
 
-    private JavaSourceCode(String source, String name, ClassUnderTest classUnderTest) {
+    private JavaSourceCode(String source, String name) {
         this.source = source;
         this.name = name;
-        this.classUnderTest = classUnderTest;
+        jvmSandbox = new JvmSandbox();
     }
 
     private static String javaType(Datatype type) {
@@ -49,55 +47,48 @@ public class JavaSourceCode implements SourceCode {
         String className = className();
         String paramString = String.join(", ", parameters);
         String source = String.format("" +
-                "package %s;\n" +
-                "import java.security.Permission;\n" +
-                "public class %s extends %s{\n" +
-                "    private final SecurityManager realManager = new SecurityManager(){\n" +
-                "    public void checkPermission(Permission permission){\n" +
-                "            throw new RuntimeException(permission.getName());\n" +
-                "        }\n" +
-                "    };\n" +
-                "\n" +
-                "    public void guard(){\n" +
-                "        System.setSecurityManager(realManager);\n" +
-                "    }\n" +
-                "\n" +
+                "import org.hombro.tea.question.code.test.java.ClassUnderTest;\n" +
+                "public class %s extends ClassUnderTest {\n" +
+                "   \n" +
+                "   // Here is your code\n" +
                 "   %s\n" +
-                "\n" +
-                "   public ClassUnderTestResponse call(){\n" +
-                "       guard();" +
-                "       try {\n" +
-                "           return ClassUnderTestResponse.fromTest(%s(%s));\n" +
-                "       } catch (Exception e){\n" +
-                "           return ClassUnderTestResponse.fromException(e);\n" +
-                "       }\n" +
+                "   \n" +
+                "" +
+                "   // Here is my expected interface\n" +
+                "   public Object call(){\n" +
+                "       return %s(%s);\n" +
                 "   }\n" +
-                "}", ClassUnderTest.class.getPackage().getName(), className, testingInterface, method, methodName, paramString);
+                "" +
+                "   public static void main(String... args){\n" +
+                "       %s mySelf = new %s();\n" +
+                "       mySelf.letsDoIt();\n" +
+                "   }\n" +
+                "}", className, method, methodName, paramString, className, className);
 
-        String name = ClassUnderTest.class.getPackage().getName() + "." + className;
-        try {
-            Class clazz = CompilerUtils.CACHED_COMPILER.loadFromJava(name, source);
-            ClassUnderTest toTest = (ClassUnderTest) clazz.newInstance();
-            return new JavaSourceCode(source, className, toTest);
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-            return new JavaSourceCode(source, className, new ClassUnderTest());
-        }
+        return new JavaSourceCode(source, className);
     }
 
     @Override
     public TestResponseResult getResult(Object expected) {
-        ClassUnderTestResponse response = classUnderTest.call();
-        if (!response.wasUnderstood())
-            return TestResponseResult.INVALID;
-        if (response.didThrow())
-            return TestResponseResult.THROW;
+        ClassUnderTestResponse response;
+        String out = jvmSandbox.run(name, source);
+        if (out.isEmpty())
+            response = ClassUnderTestResponse.noCompilation();
+        else
+            response = Json.decodeValue(out, ClassUnderTestResponse.class);
+        TestResponseResult result;
+        if (!response.isUnderstood())
+            result = TestResponseResult.INVALID;
+        else if (response.isThrew())
+            result = TestResponseResult.THROW;
         else {
-            return (response.getReturn().toString().equals(expected.toString())) ? TestResponseResult.SUCCESS : TestResponseResult.DIFFERENCE;
+            result = (response.getOutput().toString().equals(expected.toString())) ? TestResponseResult.SUCCESS : TestResponseResult.DIFFERENCE;
         }
+        return result;
     }
 
     @Override
     public List<String> getPrints() {
-        return classUnderTest.getPrints();
+        return Collections.emptyList();
     }
 }

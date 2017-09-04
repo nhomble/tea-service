@@ -1,46 +1,80 @@
 package org.hombro.tea.question.code.test;
 
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by nicolas on 8/15/2017.
  */
 public class ClassUnderTestResponse {
-    public static final ClassUnderTestResponse DEFAULT = new ClassUnderTestResponse(false, Optional.empty(), Optional.empty());
+    private Object output = null;
+    private boolean understood = false;
+    private boolean threw = false;
+    private String exceptionString = "";
+    private List<String> prints = new ArrayList<>();
 
-    private final boolean wasUnderstood;
-    private final Optional<Object> ret;
-    private final Optional<Exception> exception;
-
-    private ClassUnderTestResponse(boolean wasUnderstood, Optional<Object> ret, Optional<Exception> exception) {
-        this.wasUnderstood = wasUnderstood;
-        this.ret = ret;
-        this.exception = exception;
+    public static ClassUnderTestResponse fromException(Exception e) {
+        ClassUnderTestResponse c = new ClassUnderTestResponse();
+        c.understood = true;
+        c.threw = true;
+        c.exceptionString = e.getMessage();
+        return c;
     }
 
-    public static ClassUnderTestResponse fromException(Exception e){
-        return new ClassUnderTestResponse(true, Optional.empty(), Optional.of(e));
+    public static ClassUnderTestResponse noCompilation() {
+        ClassUnderTestResponse c = new ClassUnderTestResponse();
+        return c;
     }
 
-    public static ClassUnderTestResponse fromTest(Object o){
-        return new ClassUnderTestResponse(true, Optional.of(o), Optional.empty());
+    public static ClassUnderTestResponse fromTest(Object o) {
+        ClassUnderTestResponse c = new ClassUnderTestResponse();
+        c.output = o;
+        c.understood = true;
+        return c;
     }
 
-    public boolean didThrow(){
-        return exception.isPresent();
+    public Object getOutput() {
+        return output;
     }
 
-    public boolean didReturn(){
-        return ret.isPresent();
+    public ClassUnderTestResponse setOutput(Object output) {
+        this.output = output;
+        return this;
     }
 
-    public Object getReturn(){
-        if(!didReturn())
-            throw new RuntimeException("Guard with didReturn()");
-        return ret.get();
+    public boolean isUnderstood() {
+        return understood;
     }
 
-    public boolean wasUnderstood(){
-        return wasUnderstood;
+    public ClassUnderTestResponse setUnderstood(boolean understood) {
+        this.understood = understood;
+        return this;
+    }
+
+    public boolean isThrew() {
+        return threw;
+    }
+
+    public ClassUnderTestResponse setThrew(boolean threw) {
+        this.threw = threw;
+        return this;
+    }
+
+    public String getExceptionString() {
+        return exceptionString;
+    }
+
+    public ClassUnderTestResponse setExceptionString(String exceptionString) {
+        this.exceptionString = exceptionString;
+        return this;
+    }
+
+    public List<String> getPrints() {
+        return prints;
+    }
+
+    public ClassUnderTestResponse setPrints(List<String> prints) {
+        this.prints = prints;
+        return this;
     }
 }

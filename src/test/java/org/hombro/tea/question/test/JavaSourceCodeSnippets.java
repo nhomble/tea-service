@@ -39,9 +39,6 @@ public class JavaSourceCodeSnippets {
         String factorialFormat = "public int factorial(int n){ %s }";
         return Arrays.asList(new Object[][]{
                 {"add", "I am not java code", Arrays.asList("1", "1"), "2", TestResponseResult.INVALID},
-                {"add", String.format(addFormat, "System.exit(-1); return 0;"), Arrays.asList("1", "1"), "2", TestResponseResult.INVALID},
-
-
                 {"add", String.format(addFormat, "return x + y;"), Arrays.asList("1", "1"), "2", TestResponseResult.SUCCESS},
                 {"add", String.format(addFormat, "return x + y;"), Arrays.asList("1", "2"), "3", TestResponseResult.SUCCESS},
                 {"add", String.format(addFormat, "return x + x;"), Arrays.asList("4", "1"), "8", TestResponseResult.SUCCESS},
@@ -51,6 +48,9 @@ public class JavaSourceCodeSnippets {
                 {"factorial", String.format(factorialFormat, "return ( n == 0 || n == 1 )? 1 : n * factorial( n - 1 );"), Collections.singletonList("5"), "120", TestResponseResult.SUCCESS},
                 {"factorial", String.format(factorialFormat, "throw new RuntimeException();"), Collections.singletonList("5"), "120", TestResponseResult.THROW},
                 {"factorial", String.format(factorialFormat, "return ( n == 0 || n == 1 )? 1 : n * factorial( n - 1 );") + "private final Object randomField = null;", Collections.singletonList("5"), "120", TestResponseResult.SUCCESS},
+
+                {"add", String.format(addFormat, "System.exit(-1); return 0;"), Arrays.asList("1", "1"), "2", TestResponseResult.INVALID},
+                {"add", String.format(addFormat, "System.setSecurityManager(null); System.exit(-1); return 0;"), Arrays.asList("1", "1"), "2", TestResponseResult.INVALID},
         });
     }
 
