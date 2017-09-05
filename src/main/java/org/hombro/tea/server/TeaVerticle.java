@@ -11,6 +11,7 @@ import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.StaticHandler;
+import io.vertx.ext.web.handler.TimeoutHandler;
 import org.hombro.tea.question.QuestionProvider;
 import org.hombro.tea.question.code.CodeAnswerResult;
 import org.hombro.tea.question.code.CodingQuestion;
@@ -28,6 +29,7 @@ public class TeaVerticle extends AbstractVerticle {
     private BodyHandler bodyHandler;
     private StaticHandler staticHandler;
     private QuestionProvider questionProvider;
+    private TimeoutHandler timeoutHandler;
 
     public TeaVerticle(int port) {
         this.port = port;
@@ -93,12 +95,13 @@ public class TeaVerticle extends AbstractVerticle {
     @Override
     public void start(Future<Void> fut) {
         bodyHandler = BodyHandler.create();
+        timeoutHandler = TimeoutHandler.create(5000); // probs not the right thing to do
         staticHandler = StaticHandler
                 .create("org/hombro/tea/webroot");
         Router router = Router
                 .router(vertx);
         router.route().handler(bodyHandler);
-
+        router.route().handler(timeoutHandler);
         questionProvider = new QuestionProvider();
 
         router.get("/ping").handler(routingContext -> {
