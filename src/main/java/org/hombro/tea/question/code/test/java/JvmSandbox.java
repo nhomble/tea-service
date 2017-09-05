@@ -22,8 +22,10 @@ public class JvmSandbox {
         while ((temp = in.readLine()) != null) {
             out.append(temp);
         }
+        logger.info("waiting on process");
         p.waitFor();
         in.close();
+        logger.info("it printed: " + out.toString());
         return out.toString();
     }
 
