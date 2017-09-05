@@ -19,8 +19,9 @@ public class JvmSandbox {
         BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
         StringBuilder out = new StringBuilder();
         String temp;
-        while ((temp = in.readLine()) != null) {
+        while ((temp = in.readLine()) != null && temp.startsWith("{") && temp.endsWith("}")) {
             out.append(temp);
+            break; // there should just be 1 line printed
         }
         logger.info("waiting on process");
         p.waitFor();
