@@ -60,6 +60,9 @@ public class JvmSandbox {
                 return "";
             }
             logger.info("code has compiled!");
+            logger.info("we have the following files: ");
+            for(File f : tmp.listFiles())
+                logger.info(f.getAbsolutePath());
             processBuilder = new ProcessBuilder("java", "-cp", "\"" + classPath + ";" + tmp.getAbsolutePath() + "\"", className);
             logger.info("compile command: " + String.join(" ", processBuilder.command()));
             processBuilder.redirectErrorStream(true);
