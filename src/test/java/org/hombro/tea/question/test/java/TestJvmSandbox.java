@@ -18,7 +18,7 @@ public class TestJvmSandbox {
     }
 
     @Test
-    public void simple() throws InterruptedException {
+    public void simple() {
         String out = jvmSandbox.run("TestClass", "" +
                 "public class TestClass {\n" +
                 "public static void main(String[] args){\n" +

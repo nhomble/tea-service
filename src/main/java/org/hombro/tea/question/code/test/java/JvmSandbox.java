@@ -27,16 +27,16 @@ public class JvmSandbox {
         return out.toString();
     }
 
-    public String run(String className, String code) throws InterruptedException {
+    public String run(String className, String code) {
         logger.info(classPath);
         try {
             File tmp = Files.createTempDirectory("_delete_me_").toFile();
             logger.info(tmp.getCanonicalPath());
             tmp.deleteOnExit();
-            File source = new File(String.valueOf(tmp.getAbsoluteFile()) + separator +  className + ".java");
+            File source = new File(String.valueOf(tmp.getAbsoluteFile()) + separator + className + ".java");
             source.deleteOnExit();
-            if(!source.createNewFile()){
-                if(!source.delete()){
+            if (!source.createNewFile()) {
+                if (!source.delete()) {
                     throw new RuntimeException("fuck");
                 }
                 throw new RuntimeException("did not make file");
@@ -50,7 +50,7 @@ public class JvmSandbox {
             logger.info("compile command: " + String.join(" ", processBuilder.command()));
             processBuilder.redirectErrorStream(true);
             String error = getOutput(processBuilder.start());
-            if(!error.isEmpty()) {
+            if (!error.isEmpty()) {
                 logger.info(error);
                 source.delete();
                 tmp.delete();
@@ -63,12 +63,12 @@ public class JvmSandbox {
             Process process = processBuilder.start();
             String out = getOutput(process);
 
-            for(File f : tmp.listFiles()){
+            for (File f : tmp.listFiles()) {
                 f.delete();
             }
             tmp.delete();
             return out;
-        } catch (IOException e) {
+        } catch (InterruptedException | IOException e) {
             logger.info("Some exception: " + e.getMessage());
             return "";
         }

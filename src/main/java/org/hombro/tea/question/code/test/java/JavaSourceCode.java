@@ -72,15 +72,11 @@ public class JavaSourceCode implements SourceCode {
     public TestResponseResult getResult(Object expected) {
         ClassUnderTestResponse response;
         String out = null;
-        try {
-            out = jvmSandbox.run(name, source);
-            if (out.isEmpty())
-                response = ClassUnderTestResponse.noCompilation();
-            else
-                response = Json.decodeValue(out, ClassUnderTestResponse.class);
-        } catch (InterruptedException e) {
-            response = ClassUnderTestResponse.fromTimeout(e);
-        }
+        out = jvmSandbox.run(name, source);
+        if (out.isEmpty())
+            response = ClassUnderTestResponse.noCompilation();
+        else
+            response = Json.decodeValue(out, ClassUnderTestResponse.class);
 
         TestResponseResult result;
         if (!response.isUnderstood())
