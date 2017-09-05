@@ -35,12 +35,12 @@ public class JvmSandbox {
         try {
             File tmp = Files.createTempDirectory("_delete_me_").toFile();
             logger.info(tmp.getCanonicalPath());
-            tmp.deleteOnExit();
+            //tmp.deleteOnExit();
             File source = new File(String.valueOf(tmp.getAbsoluteFile()) + separator + className + ".java");
-            source.deleteOnExit();
+            //source.deleteOnExit();
             if (!source.createNewFile()) {
                 if (!source.delete()) {
-                    throw new RuntimeException("fuck");
+                    throw new RuntimeException("no delete");
                 }
                 throw new RuntimeException("did not make file");
             }
@@ -66,10 +66,10 @@ public class JvmSandbox {
             Process process = processBuilder.start();
             String out = getOutput(process);
 
-            for (File f : tmp.listFiles()) {
-                f.delete();
-            }
-            tmp.delete();
+            //for (File f : tmp.listFiles()) {
+            //    f.delete();
+            //}
+            //tmp.delete();
             return out;
         } catch (InterruptedException | IOException e) {
             logger.info("Some exception: " + e.getMessage());
