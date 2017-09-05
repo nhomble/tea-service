@@ -69,7 +69,7 @@ public class JvmSandbox {
             for(File f : tmp.listFiles())
                 logger.info(f.getAbsolutePath());
             processBuilder = new ProcessBuilder("java", "-cp", "\"" + classPath + cpJoiner() + tmp.getAbsolutePath() + "\"", className);
-            logger.info("compile command: " + String.join(" ", processBuilder.command()));
+            logger.info("run command: " + String.join(" ", processBuilder.command()));
             processBuilder.redirectErrorStream(true);
             Process process = processBuilder.start();
             String out = getOutput(process);
