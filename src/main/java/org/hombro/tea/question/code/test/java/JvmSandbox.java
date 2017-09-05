@@ -14,6 +14,7 @@ public class JvmSandbox {
 
     private String separator = System.getProperty("file.separator");
     private String classPath = System.getProperty("java.class.path");
+    private String os = System.getProperty("os.name").toLowerCase();
 
     private String getOutput(Process p) throws IOException, InterruptedException {
         BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
@@ -28,6 +29,10 @@ public class JvmSandbox {
         p.waitFor();
         in.close();
         return out;
+    }
+
+    private String cpJoiner(){
+        return (os.contains("win"))? ";" : ":";
     }
 
     public String run(String className, String code) {
@@ -63,7 +68,7 @@ public class JvmSandbox {
             logger.info("we have the following files: ");
             for(File f : tmp.listFiles())
                 logger.info(f.getAbsolutePath());
-            processBuilder = new ProcessBuilder("java", "-cp", "\"" + classPath + separator + tmp.getAbsolutePath() + "\"", className);
+            processBuilder = new ProcessBuilder("java", "-cp", "\"" + classPath + cpJoiner() + tmp.getAbsolutePath() + "\"", className);
             logger.info("compile command: " + String.join(" ", processBuilder.command()));
             processBuilder.redirectErrorStream(true);
             Process process = processBuilder.start();
