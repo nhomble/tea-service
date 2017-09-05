@@ -27,7 +27,7 @@ public class JvmSandbox {
         return out.toString();
     }
 
-    public String run(String className, String code) {
+    public String run(String className, String code) throws InterruptedException {
         logger.info(classPath);
         try {
             File tmp = Files.createTempDirectory("_delete_me_").toFile();
@@ -68,7 +68,7 @@ public class JvmSandbox {
             }
             tmp.delete();
             return out;
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException e) {
             logger.info("Some exception: " + e.getMessage());
             return "";
         }

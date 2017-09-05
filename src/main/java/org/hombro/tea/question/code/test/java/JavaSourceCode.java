@@ -71,11 +71,17 @@ public class JavaSourceCode implements SourceCode {
     @Override
     public TestResponseResult getResult(Object expected) {
         ClassUnderTestResponse response;
-        String out = jvmSandbox.run(name, source);
-        if (out.isEmpty())
-            response = ClassUnderTestResponse.noCompilation();
-        else
-            response = Json.decodeValue(out, ClassUnderTestResponse.class);
+        String out = null;
+        try {
+            out = jvmSandbox.run(name, source);
+            if (out.isEmpty())
+                response = ClassUnderTestResponse.noCompilation();
+            else
+                response = Json.decodeValue(out, ClassUnderTestResponse.class);
+        } catch (InterruptedException e) {
+            response = ClassUnderTestResponse.fromTimeout(e);
+        }
+
         TestResponseResult result;
         if (!response.isUnderstood())
             result = TestResponseResult.INVALID;
