@@ -17,17 +17,17 @@ public class JvmSandbox {
 
     private String getOutput(Process p) throws IOException, InterruptedException {
         BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
-        StringBuilder out = new StringBuilder();
+        String out = "";
         String temp;
-        while ((temp = in.readLine()) != null && temp.startsWith("{") && temp.endsWith("}")) {
-            out.append(temp);
-            break; // there should just be 1 line printed
+        while ((temp = in.readLine()) != null ) {
+            logger.info("Got: " + temp);
+            if(temp.startsWith("{") && temp.endsWith("}"))
+                out = temp;
         }
         logger.info("waiting on process");
         p.waitFor();
         in.close();
-        logger.info("it printed: " + out.toString());
-        return out.toString();
+        return out;
     }
 
     public String run(String className, String code) {
