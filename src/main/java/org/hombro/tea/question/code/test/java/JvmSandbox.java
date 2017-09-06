@@ -14,7 +14,6 @@ public class JvmSandbox {
 
     private String separator = System.getProperty("file.separator");
     private String classPath = System.getProperty("java.class.path");
-    private String os = System.getProperty("os.name").toLowerCase();
 
     private String getOutput(Process p) throws IOException, InterruptedException {
         BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
@@ -31,19 +30,9 @@ public class JvmSandbox {
         return out;
     }
 
-    private boolean isWindows(){
-        return os.contains("win");
-    }
-
-    private String cpJoiner(){
-        return isWindows()? ";" : ":";
-    }
-
     public String run(String className, String code) {
-        logger.info(classPath);
         try {
             File tmp = Files.createTempDirectory("_delete_me_").toFile();
-            logger.info(tmp.getCanonicalPath());
             tmp.deleteOnExit();
             File source = new File(String.valueOf(tmp.getAbsoluteFile()) + separator + className + ".java");
             source.deleteOnExit();
@@ -57,7 +46,10 @@ public class JvmSandbox {
             FileWriter writer = new FileWriter(source);
             writer.write(code);
             writer.close();
-            logger.info("wrote: " + source.getCanonicalPath());
+            /**
+             * Here we compile our runtime source file into the filesystem. Our subsequent call to java will take the
+             * tmp class path as an argument so we can control its loading via java.
+             */
             ProcessBuilder processBuilder = new ProcessBuilder("javac", "-cp", classPath, source.getAbsolutePath());
             logger.info("compile command: " + String.join(" ", processBuilder.command()));
             processBuilder.redirectErrorStream(true);
@@ -68,11 +60,7 @@ public class JvmSandbox {
                 tmp.delete();
                 return "";
             }
-            logger.info("code has compiled!");
-            logger.info("we have the following files: ");
-            for(File f : tmp.listFiles())
-                logger.info(f.getAbsolutePath());
-            processBuilder = new ProcessBuilder("java", "-verbose:class", "-cp", "\"" + classPath + cpJoiner() + tmp.getAbsolutePath() + "\"", className);
+            processBuilder = new ProcessBuilder("java", "-cp", classPath, ClassUnderTest.class.getCanonicalName(), tmp.getAbsolutePath() + separator, className);
             logger.info("run command: " + String.join(" ", processBuilder.command()));
             processBuilder.redirectErrorStream(true);
             Process process = processBuilder.start();

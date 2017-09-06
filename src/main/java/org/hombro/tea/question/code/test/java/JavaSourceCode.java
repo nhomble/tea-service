@@ -58,11 +58,6 @@ public class JavaSourceCode implements SourceCode {
                 "   public Object call(){\n" +
                 "       return %s(%s);\n" +
                 "   }\n" +
-                "" +
-                "   public static void main(String... args){\n" +
-                "       %s mySelf = new %s();\n" +
-                "       mySelf.letsDoIt();\n" +
-                "   }\n" +
                 "}", className, method, methodName, paramString, className, className);
 
         return new JavaSourceCode(source, className);

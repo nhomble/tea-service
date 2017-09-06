@@ -20,11 +20,10 @@ public class TestJvmSandbox {
     @Test
     public void simple() {
         String out = jvmSandbox.run("TestClass", "" +
-                "public class TestClass {\n" +
-                "public static void main(String[] args){\n" +
-                "   System.out.println(\"{hey}\");\n" +
-                "}\n" +
+                "import org.hombro.tea.question.code.test.java.ClassUnderTest;\n" +
+                "public class TestClass extends ClassUnderTest{\n" +
+                "   public Object call(){ return 1; }\n" +
                 "}\n");
-        assertEquals(out, "{hey}");
+        assertEquals(out, "{\"output\":1,\"understood\":true,\"threw\":false,\"exceptionString\":\"\",\"prints\":[]}");
     }
 }
