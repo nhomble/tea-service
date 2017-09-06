@@ -1,7 +1,6 @@
 package org.hombro.tea.question.code.test.java;
 
 import io.vertx.core.json.Json;
-import org.hombro.tea.question.code.Datatype;
 import org.hombro.tea.question.code.test.ClassUnderTestResponse;
 import org.hombro.tea.question.code.test.SourceCode;
 import org.hombro.tea.question.code.test.TestResponseResult;
@@ -22,21 +21,6 @@ public class JavaSourceCode implements SourceCode {
         this.source = source;
         this.name = name;
         jvmSandbox = new JvmSandbox();
-    }
-
-    private static String javaType(Datatype type) {
-        switch (type) {
-            case DOUBLE:
-                return "Double";
-            case INTEGER:
-                return "Integer";
-            case STRING:
-                return "String";
-            case NONE:
-                return "void";
-            default:
-                throw new RuntimeException("unhandled type");
-        }
     }
 
     private static String className() {
