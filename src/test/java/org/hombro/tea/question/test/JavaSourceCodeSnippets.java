@@ -57,6 +57,6 @@ public class JavaSourceCodeSnippets {
     @Test
     public void test() {
         SourceCode sourceCode = JavaSourceCode.createJavaSource(methodName, solution, params);
-        assertEquals(sourceCode.getResult(expected), testResponseResult);
+        assertEquals(sourceCode.getResult(expected).getTestResponseResult(), testResponseResult);
     }
 }

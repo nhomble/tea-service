@@ -1,7 +1,6 @@
 package org.hombro.tea.question.code.test.java;
 
 import io.vertx.core.json.Json;
-import org.hombro.tea.question.code.test.ClassUnderTestResponse;
 
 import java.io.File;
 import java.net.MalformedURLException;

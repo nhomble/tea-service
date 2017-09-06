@@ -1,11 +1,10 @@
 package org.hombro.tea.question.code.test.java;
 
 import io.vertx.core.json.Json;
-import org.hombro.tea.question.code.test.ClassUnderTestResponse;
 import org.hombro.tea.question.code.test.SourceCode;
+import org.hombro.tea.question.code.test.TestResponse;
 import org.hombro.tea.question.code.test.TestResponseResult;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -48,7 +47,7 @@ public class JavaSourceCode implements SourceCode {
     }
 
     @Override
-    public TestResponseResult getResult(Object expected) {
+    public TestResponse getResult(Object expected) {
         ClassUnderTestResponse response;
         String out = jvmSandbox.run(name, source);
         if (out.isEmpty())
@@ -64,11 +63,6 @@ public class JavaSourceCode implements SourceCode {
         else {
             result = (response.getOutput().toString().equals(expected.toString())) ? TestResponseResult.SUCCESS : TestResponseResult.DIFFERENCE;
         }
-        return result;
-    }
-
-    @Override
-    public List<String> getPrints() {
-        return Collections.emptyList();
+        return new TestResponse(response, result);
     }
 }

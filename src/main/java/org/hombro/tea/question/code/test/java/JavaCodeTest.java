@@ -5,6 +5,7 @@ import org.hombro.tea.question.code.CodeAnswerResult;
 import org.hombro.tea.question.code.TestCaseResult;
 import org.hombro.tea.question.code.test.CodeTest;
 import org.hombro.tea.question.code.test.SourceCode;
+import org.hombro.tea.question.code.test.TestResponse;
 
 import java.util.Collections;
 import java.util.List;
@@ -13,10 +14,10 @@ import java.util.stream.Collectors;
 /**
  * Created by nicolas on 8/13/2017.
  */
-public class JavaTest implements CodeTest {
-    public static JavaTest INSTANCE = new JavaTest();
+public class JavaCodeTest implements CodeTest {
+    public static JavaCodeTest INSTANCE = new JavaCodeTest();
 
-    private JavaTest() {
+    private JavaCodeTest() {
     }
 
     @Override
@@ -28,11 +29,12 @@ public class JavaTest implements CodeTest {
                     test.getIn()
             );
             List<String> argsList = (test.isPublic())? test.getIn() : Collections.emptyList();
+            TestResponse response = source.getResult(test.getOut());
             return new TestCaseResult()
-                    .setResult(source.getResult(test.getOut()))
+                    .setResult(response.getTestResponseResult())
                     .setPublic(test.isPublic())
                     .setArgList(argsList)
-                    .setPrints(source.getPrints());
+                    .setPrints(response.getPrints());
         }).collect(Collectors.toList());
         return new CodeAnswerResult().setResults(results);
     }
