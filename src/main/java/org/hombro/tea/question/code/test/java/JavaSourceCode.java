@@ -13,7 +13,7 @@ import java.util.List;
  * Created by nicolas on 8/13/2017.
  */
 public class JavaSourceCode implements SourceCode {
-    private static final String testingInterface = "ClassUnderTest";
+    private static final String testHarness = ClassUnderTest.class.getSimpleName();
     private final JvmSandbox jvmSandbox;
     public final String source;
     public final String name;
@@ -40,7 +40,7 @@ public class JavaSourceCode implements SourceCode {
     }
 
     private static String className() {
-        return "ClassUnderTest" + (int) (Math.random() * 100000); // TODO confirm if there is a better way;
+        return testHarness + System.nanoTime();
     }
 
     public static SourceCode createJavaSource(String methodName, String method, List<String> parameters) {
@@ -48,7 +48,7 @@ public class JavaSourceCode implements SourceCode {
         String paramString = String.join(", ", parameters);
         String source = String.format("" +
                 "import org.hombro.tea.question.code.test.java.ClassUnderTest;\n" +
-                "public class %s extends ClassUnderTest {\n" +
+                "public class %s extends %s {\n" +
                 "   \n" +
                 "   // Here is your code\n" +
                 "   %s\n" +
@@ -58,7 +58,7 @@ public class JavaSourceCode implements SourceCode {
                 "   public Object call(){\n" +
                 "       return %s(%s);\n" +
                 "   }\n" +
-                "}", className, method, methodName, paramString, className, className);
+                "}", className, testHarness, method, methodName, paramString);
 
         return new JavaSourceCode(source, className);
     }
