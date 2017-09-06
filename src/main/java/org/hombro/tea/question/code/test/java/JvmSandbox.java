@@ -31,8 +31,12 @@ public class JvmSandbox {
         return out;
     }
 
+    private boolean isWindows(){
+        return os.contains("win");
+    }
+
     private String cpJoiner(){
-        return (os.contains("win"))? ";" : ":";
+        return isWindows()? ";" : ":";
     }
 
     public String run(String className, String code) {
@@ -68,7 +72,7 @@ public class JvmSandbox {
             logger.info("we have the following files: ");
             for(File f : tmp.listFiles())
                 logger.info(f.getAbsolutePath());
-            processBuilder = new ProcessBuilder("java", "-cp", "\"" + classPath + cpJoiner() + tmp.getAbsolutePath() + "\"", className);
+            processBuilder = new ProcessBuilder("java", "-verbose:class", "-cp", "\"" + classPath + cpJoiner() + tmp.getAbsolutePath() + "\"", className);
             logger.info("run command: " + String.join(" ", processBuilder.command()));
             processBuilder.redirectErrorStream(true);
             Process process = processBuilder.start();
