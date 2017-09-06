@@ -22,9 +22,9 @@ public class TestJvmSandbox {
         String out = jvmSandbox.run("TestClass", "" +
                 "public class TestClass {\n" +
                 "public static void main(String[] args){\n" +
-                "   System.out.println(\"hey\");\n" +
+                "   System.out.println(\"{hey}\");\n" +
                 "}\n" +
                 "}\n");
-        assertEquals(out, "hey");
+        assertEquals(out, "{hey}");
     }
 }
