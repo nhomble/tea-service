@@ -37,7 +37,7 @@ public abstract class ClassUnderTest {
         }
     }
 
-    public void letsDoIt() {
+    public String letsDoIt() {
         ClassUnderTestResponse response;
         try {
             Object o = call();
@@ -46,11 +46,11 @@ public abstract class ClassUnderTest {
             response = ClassUnderTestResponse.fromException(e);
         }
         response.setPrints(prints);
-        System.out.println(printCall(response));
+        return printCall(response);
     }
 
     public static void main(String[] args) {
         ClassUnderTest classUnderTest = getClassUnderTest(args[0], args[1]);
-        classUnderTest.letsDoIt();
+        System.out.println(classUnderTest.letsDoIt());
     }
 }
