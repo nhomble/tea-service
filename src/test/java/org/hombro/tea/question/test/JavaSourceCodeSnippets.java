@@ -51,6 +51,7 @@ public class JavaSourceCodeSnippets {
 
                 {"add", String.format(addFormat, "System.exit(-1); return 0;"), Arrays.asList("1", "1"), "2", TestResponseResult.INVALID},
                 {"add", String.format(addFormat, "System.setSecurityManager(null); System.exit(-1); return 0;"), Arrays.asList("1", "1"), "2", TestResponseResult.INVALID},
+                {"add", String.format(addFormat, "return add(0, 0);"), Arrays.asList("1", "1"), "2", TestResponseResult.INVALID}
         });
     }
 
