@@ -17,7 +17,7 @@ public class ClassUnderTestResponse {
         ClassUnderTestResponse c = new ClassUnderTestResponse();
         c.understood = true;
         c.threw = true;
-        c.exceptionString = e.getMessage();
+        c.exceptionString = e.toString();
         return c;
     }
 

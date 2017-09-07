@@ -32,4 +32,37 @@ public class TestTheClassUnderTest {
         ChildClass c = new ChildClass();
         assertEquals("{\"output\":1,\"understood\":true,\"threw\":false,\"exceptionString\":\"\",\"prints\":[\"print\"]}", c.letsDoIt());
     }
+
+    @Test
+    public void timeout(){
+        class ChildClass extends ClassUnderTest {
+            public Object call(){
+                while(true){}
+            }
+        }
+        ChildClass c = new ChildClass();
+        assertEquals("{\"output\":null,\"understood\":true,\"threw\":true,\"exceptionString\":\"java.util.concurrent.CancellationException\",\"prints\":[]}", c.letsDoIt());
+    }
+
+    @Test
+    public void stackoverflow(){
+        class ChildClass extends ClassUnderTest {
+            public Object call(){
+                return call();
+            }
+        }
+        ChildClass c = new ChildClass();
+        assertEquals("{\"output\":null,\"understood\":true,\"threw\":true,\"exceptionString\":\"java.util.concurrent.ExecutionException: java.lang.StackOverflowError\",\"prints\":[]}", c.letsDoIt());
+    }
+
+    @Test
+    public void throwRuntime(){
+        class ChildClass extends ClassUnderTest {
+            public Object call(){
+                throw new RuntimeException("hey there");
+            }
+        }
+        ChildClass c = new ChildClass();
+        assertEquals("{\"output\":null,\"understood\":true,\"threw\":true,\"exceptionString\":\"java.util.concurrent.ExecutionException: java.lang.RuntimeException: hey there\",\"prints\":[]}", c.letsDoIt());
+    }
 }

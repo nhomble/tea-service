@@ -25,7 +25,7 @@ public class JavaSourceCodeSnippets {
     private String expected;
     private TestResponseResult testResponseResult;
 
-    public JavaSourceCodeSnippets(String methodName, String solution, List<String> params, String expected, TestResponseResult testResponseResult) {
+    public JavaSourceCodeSnippets(String testName, String methodName, String solution, List<String> params, String expected, TestResponseResult testResponseResult) {
         this.methodName = methodName;
         this.solution = solution;
         this.params = params;
@@ -33,25 +33,32 @@ public class JavaSourceCodeSnippets {
         this.testResponseResult = testResponseResult;
     }
 
-    @Parameterized.Parameters
+    private static Object[] badCode(String name, String content, TestResponseResult result) {
+        return new Object[]{name, "add", String.format("public int add(int x, int y){ %s }", content), Arrays.asList("1", "1"), "2", result};
+    }
+
+    @Parameterized.Parameters(name = "{index}: {0}")
     public static Collection<Object[]> data() {
         String addFormat = "public int add(int x, int y){ %s }";
         String factorialFormat = "public int factorial(int n){ %s }";
         return Arrays.asList(new Object[][]{
-                {"add", "I am not java code", Arrays.asList("1", "1"), "2", TestResponseResult.INVALID},
-                {"add", String.format(addFormat, "return x + y;"), Arrays.asList("1", "1"), "2", TestResponseResult.SUCCESS},
-                {"add", String.format(addFormat, "return x + y;"), Arrays.asList("1", "2"), "3", TestResponseResult.SUCCESS},
-                {"add", String.format(addFormat, "return x + x;"), Arrays.asList("4", "1"), "8", TestResponseResult.SUCCESS},
-                {"add", String.format(addFormat, "return 0;"), Arrays.asList("1", "1"), "2", TestResponseResult.DIFFERENCE},
-                {"factorial", String.format(factorialFormat, "return ( n == 0 || n == 1 )? 1 : n * factorial( n - 1 );"), Collections.singletonList("0"), "1", TestResponseResult.SUCCESS},
-                {"factorial", String.format(factorialFormat, "return ( n == 0 || n == 1 )? 1 : n * factorial( n - 1 );"), Collections.singletonList("1"), "1", TestResponseResult.SUCCESS},
-                {"factorial", String.format(factorialFormat, "return ( n == 0 || n == 1 )? 1 : n * factorial( n - 1 );"), Collections.singletonList("5"), "120", TestResponseResult.SUCCESS},
-                {"factorial", String.format(factorialFormat, "throw new RuntimeException();"), Collections.singletonList("5"), "120", TestResponseResult.THROW},
-                {"factorial", String.format(factorialFormat, "return ( n == 0 || n == 1 )? 1 : n * factorial( n - 1 );") + "private final Object randomField = null;", Collections.singletonList("5"), "120", TestResponseResult.SUCCESS},
+                {"simpleAdd", "add", String.format(addFormat, "return x + y;"), Arrays.asList("1", "1"), "2", TestResponseResult.SUCCESS},
+                {"simpleAdd", "add", String.format(addFormat, "return x + y;"), Arrays.asList("1", "2"), "3", TestResponseResult.SUCCESS},
+                {"simpleAdd", "add", String.format(addFormat, "return x + x;"), Arrays.asList("4", "1"), "8", TestResponseResult.SUCCESS},
+                {"incorrect add", "add", String.format(addFormat, "return 0;"), Arrays.asList("1", "1"), "2", TestResponseResult.DIFFERENCE},
+                {"simpleFactorial", "factorial", String.format(factorialFormat, "return ( n == 0 || n == 1 )? 1 : n * factorial( n - 1 );"), Collections.singletonList("0"), "1", TestResponseResult.SUCCESS},
+                {"simpleFactorial","factorial", String.format(factorialFormat, "return ( n == 0 || n == 1 )? 1 : n * factorial( n - 1 );"), Collections.singletonList("1"), "1", TestResponseResult.SUCCESS},
+                {"simpleFactorial","factorial", String.format(factorialFormat, "return ( n == 0 || n == 1 )? 1 : n * factorial( n - 1 );"), Collections.singletonList("5"), "120", TestResponseResult.SUCCESS},
+                {"simgpleFactorial", "factorial", String.format(factorialFormat, "return ( n == 0 || n == 1 )? 1 : n * factorial( n - 1 );") + "private final Object randomField = null;", Collections.singletonList("5"), "120", TestResponseResult.SUCCESS},
 
-                {"add", String.format(addFormat, "System.exit(-1); return 0;"), Arrays.asList("1", "1"), "2", TestResponseResult.INVALID},
-                {"add", String.format(addFormat, "System.setSecurityManager(null); System.exit(-1); return 0;"), Arrays.asList("1", "1"), "2", TestResponseResult.INVALID},
-                {"add", String.format(addFormat, "return add(0, 0);"), Arrays.asList("1", "1"), "2", TestResponseResult.INVALID}
+                badCode("throw RuntimeException", "throw new RuntimeException();", TestResponseResult.THROW),
+                badCode("stackoverflow", "return add(0, 0) + add(0, 0);", TestResponseResult.THROW),
+                badCode("infinite loop", "while(true){}", TestResponseResult.THROW),
+
+                badCode("not java code", "I am not java code", TestResponseResult.INVALID),
+                badCode("sys exit", "System.exit(-1); return 0;", TestResponseResult.INVALID),
+                badCode("null sec manager, sys exit", "System.setSecurityManager(null); System.exit(-1); return 0;", TestResponseResult.INVALID),
+                badCode("oom", "long[] l = new long[Integer.MAX_VALUE]; return 0", TestResponseResult.INVALID)
         });
     }
 
