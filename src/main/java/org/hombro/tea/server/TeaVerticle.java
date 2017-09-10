@@ -16,7 +16,9 @@ import org.hombro.tea.question.code.CodeAnswerResult;
 import org.hombro.tea.question.code.CodingQuestion;
 import org.hombro.tea.question.code.Language;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by nicolas on 8/12/2017.
@@ -65,6 +67,19 @@ public class TeaVerticle extends AbstractVerticle {
                     .putHeader("content-type", "application/json")
                     .end(Json.encode(question));
         });
+
+        /*
+        Get all supported languages
+         */
+        router.get(root + "languages").handler(routingContext -> {
+            HttpServerResponse response = routingContext.response();
+            logger.info("Received requested GET for all languages");
+            List<String> languages = Arrays.stream(Language.values()).map(Language::toString).collect(Collectors.toList());
+            JsonArray array = new JsonArray(languages);
+            response.putHeader("content-type", "application/json")
+                    .end(array.toString());
+        });
+
         /*
         Post your solution text for a coding question
          */
@@ -84,6 +99,7 @@ public class TeaVerticle extends AbstractVerticle {
                         .end(Json.encode(result.result()));
             });
         });
+
         return router;
     }
 
