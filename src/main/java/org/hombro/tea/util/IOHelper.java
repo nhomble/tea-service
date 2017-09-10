@@ -1,5 +1,7 @@
 package org.hombro.tea.util;
 
+import io.vertx.core.logging.Logger;
+import io.vertx.core.logging.LoggerFactory;
 import org.apache.commons.io.IOUtils;
 import org.hombro.tea.question.code.Language;
 
@@ -15,6 +17,7 @@ import java.util.List;
  * Created by nicolas on 8/12/2017.
  */
 public class IOHelper {
+    private static Logger logger = LoggerFactory.getLogger(IOHelper.class);
     private static String QUESTION_PATH = "org/hombro/tea/question/";
 
     private IOHelper() {
@@ -47,6 +50,7 @@ public class IOHelper {
             if (list != null)
                 Collections.addAll(files, list);
         });
+        logger.info(String.format("Found %s files", files.size()));
         return files;
     }
 
