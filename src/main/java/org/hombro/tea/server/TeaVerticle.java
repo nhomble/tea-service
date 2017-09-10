@@ -97,7 +97,7 @@ public class TeaVerticle extends AbstractVerticle {
     public void start(Future<Void> fut) {
         bodyHandler = BodyHandler.create();
         staticHandler = StaticHandler
-                .create("org/hombro/tea/webroot");
+                .create("org/hombro/tea/webroot/src");
         Router router = Router
                 .router(vertx);
         router.route().handler(bodyHandler);
