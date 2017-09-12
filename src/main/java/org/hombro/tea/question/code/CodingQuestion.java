@@ -1,6 +1,7 @@
 package org.hombro.tea.question.code;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by nicolas on 8/12/2017.
@@ -11,6 +12,15 @@ public class CodingQuestion {
     private List<Argument> arguments;
     private List<TestCase> tests;
     private String datatype;
+
+    public String getEndpoint(){
+        return (language.toString() + "/" + name).toLowerCase();
+    }
+
+    public String getBoilerPlate() {
+        String type = getDatatype().forLanguage(getLanguage());
+        return String.format("public %s %s(%s){\n}", type, getFunctionName(), getArguments().stream().map(a -> a.getDatatype().forLanguage(getLanguage()) + " " + a.getName()).collect(Collectors.joining(", ")));
+    }
 
     public Datatype getDatatype() {
         return Datatype.valueOf(datatype.toUpperCase());
