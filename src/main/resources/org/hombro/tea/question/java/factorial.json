@@ -1,31 +1,31 @@
 {
   "name": "Factorial",
   "functionName": "factorial",
-  "language": "java",
-  "datatype": "integer",
+  "language": "JAVA",
+  "datatype": "INTEGER",
   "arguments": [
     {
       "name": "n",
-      "datatype": "integer"
+      "datatype": "INTEGER"
     }
   ],
   "tests": [
     {
-      "visibility": "public",
+      "visibility": "PUBLIC",
       "in": [
         "0"
       ],
       "out": "1"
     },
     {
-      "visibility": "public",
+      "visibility": "PUBLIC",
       "in": [
         "0"
       ],
       "out": "1"
     },
     {
-      "visibility": "public",
+      "visibility": "PUBLIC",
       "in": [
         "5"
       ],

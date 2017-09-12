@@ -1,21 +1,21 @@
 {
   "name": "Addition",
   "functionName": "addition",
-  "language": "java",
-  "datatype": "integer",
+  "language": "JAVA",
+  "datatype": "INTEGER",
   "arguments": [
     {
       "name": "x",
-      "datatype": "integer"
+      "datatype": "INTEGER"
     },
     {
       "name": "y",
-      "datatype": "integer"
+      "datatype": "INTEGER"
     }
   ],
   "tests": [
     {
-      "visibility": "public",
+      "visibility": "PUBLIC",
       "in": [
         "0",
         "0"
@@ -23,7 +23,7 @@
       "out": "0"
     },
     {
-      "visibility": "public",
+      "visibility": "PUBLIC",
       "in": [
         "-1",
         "1"
@@ -31,7 +31,7 @@
       "out": "0"
     },
     {
-      "visibility": "public",
+      "visibility": "PUBLIC",
       "in": [
         "1",
         "1"

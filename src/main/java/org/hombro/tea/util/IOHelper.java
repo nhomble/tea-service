@@ -10,7 +10,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -62,9 +61,9 @@ public class IOHelper {
         return getFromFile(QUESTION_PATH + path.toLowerCase() + ".json");
     }
 
-    public static File writeTempFile(String text){
+    public static File inMemoryFile(String text){
         try {
-            File tmp = Files.createTempDirectory("tmp_" + System.nanoTime()).toFile();
+            File tmp = new File("tmp_" + System.nanoTime());
             tmp.deleteOnExit();
             FileWriter writer = new FileWriter(tmp);
             writer.write(text);

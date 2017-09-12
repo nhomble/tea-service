@@ -1,12 +1,12 @@
 package org.hombro.tea.question;
 
 import io.vertx.core.json.Json;
-import org.hombro.tea.db.FilesystemQuestions;
+import org.hombro.tea.db.FirebaseQuestions;
+import org.hombro.tea.db.QuestionStore;
 import org.hombro.tea.question.code.CodeAnswer;
 import org.hombro.tea.question.code.CodeAnswerResult;
 import org.hombro.tea.question.code.CodingQuestion;
 import org.hombro.tea.question.code.Language;
-import org.hombro.tea.db.QuestionStore;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
  * Created by nicolas on 8/12/2017.
  */
 public class QuestionProvider {
-    private QuestionStore questionStore = new FilesystemQuestions();
+    private QuestionStore questionStore = new FirebaseQuestions();
 
     public List<String> getQuestions() {
         return questionStore.getQuestions();
