@@ -64,6 +64,8 @@ public class IOHelper {
     public static File inMemoryFile(String text){
         try {
             File tmp = new File("tmp_" + System.nanoTime());
+            if(!tmp.createNewFile())
+                throw new RuntimeException("Failed to create the file");
             tmp.deleteOnExit();
             FileWriter writer = new FileWriter(tmp);
             writer.write(text);
