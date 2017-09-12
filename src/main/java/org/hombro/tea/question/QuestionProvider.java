@@ -1,31 +1,27 @@
 package org.hombro.tea.question;
 
 import io.vertx.core.json.Json;
+import org.hombro.tea.db.FilesystemQuestions;
 import org.hombro.tea.question.code.CodeAnswer;
 import org.hombro.tea.question.code.CodeAnswerResult;
 import org.hombro.tea.question.code.CodingQuestion;
 import org.hombro.tea.question.code.Language;
-import org.hombro.tea.util.IOHelper;
+import org.hombro.tea.db.QuestionStore;
 
-import java.io.File;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by nicolas on 8/12/2017.
  */
 public class QuestionProvider {
+    private QuestionStore questionStore = new FilesystemQuestions();
 
     public List<String> getQuestions() {
-        List<File> files = IOHelper.getQuestionsFromFile();
-        return files.stream()
-                .map(f -> f.getParentFile().getName() + "/" + f.getName().split("\\.")[0])
-                .collect(Collectors.toList());
+        return questionStore.getQuestions();
     }
 
     public CodingQuestion getQuestionInfo(Language language, String name) {
-        String questionString = IOHelper.getQuestionFromFile(language.toString() + "/" + name);
-        return Json.decodeValue(questionString, CodingQuestion.class);
+        return questionStore.getQuestionInfo(language, name);
     }
 
     public CodeAnswerResult testAnswer(String content, Language language, String name) {
