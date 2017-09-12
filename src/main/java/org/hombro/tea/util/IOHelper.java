@@ -39,7 +39,9 @@ public class IOHelper {
     public static List<File> getQuestionsFromFile() {
         List<File> dirs = new ArrayList<>();
         for (Language lang : Language.values()) {
-            URL url = IOHelper.class.getClassLoader().getResource(QUESTION_PATH + lang.toString().toLowerCase());
+            String path = QUESTION_PATH + lang.toString().toLowerCase();
+            logger.info("Looking in path: " + path);
+            URL url = IOHelper.class.getClassLoader().getResource(path);
             if (url != null && url.getFile() != null) {
                 dirs.add(new File(url.getFile()));
             }
