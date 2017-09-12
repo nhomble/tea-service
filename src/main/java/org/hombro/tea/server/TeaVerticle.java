@@ -10,7 +10,6 @@ import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
-import io.vertx.ext.web.handler.StaticHandler;
 import org.hombro.tea.question.QuestionProvider;
 import org.hombro.tea.question.code.CodeAnswerResult;
 import org.hombro.tea.question.code.CodingQuestion;
@@ -28,7 +27,6 @@ public class TeaVerticle extends AbstractVerticle {
     private final int port;
 
     private BodyHandler bodyHandler;
-    private StaticHandler staticHandler;
     private QuestionProvider questionProvider;
 
     public TeaVerticle(int port) {
@@ -103,17 +101,9 @@ public class TeaVerticle extends AbstractVerticle {
         return router;
     }
 
-    private Router webAppRoutes(Router router) {
-        router.route("/tea/app/*").handler(staticHandler);
-        router.route("/").handler(staticHandler);
-        return router;
-    }
-
     @Override
     public void start(Future<Void> fut) {
         bodyHandler = BodyHandler.create();
-        staticHandler = StaticHandler
-                .create("org/hombro/tea/webroot/src");
         Router router = Router
                 .router(vertx);
         router.route().handler(bodyHandler);
@@ -126,7 +116,6 @@ public class TeaVerticle extends AbstractVerticle {
                     .end("pong");
         });
         router = questionRoutes("/tea/", router);
-        router = webAppRoutes(router);
 
         vertx
                 .createHttpServer()
