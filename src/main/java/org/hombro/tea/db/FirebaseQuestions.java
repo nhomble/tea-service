@@ -27,7 +27,7 @@ import java.util.concurrent.ExecutionException;
 public class FirebaseQuestions implements QuestionStore {
     private static final Logger logger = LoggerFactory.getLogger(FirebaseQuestions.class);
     private static final String FIREBASE_KEY_ID = "FIREBASE_PRIVATE_KEY_ID";
-    private static final String FIREBASE_KEY = "FIREBASE_PRIVATE_KEY_ID";
+    private static final String FIREBASE_KEY = "FIREBASE_PRIVATE_KEY";
     private static final String FIREBASE_NAME = "https://tea-service.firebaseio.com/";
     private final File secretFile;
 
