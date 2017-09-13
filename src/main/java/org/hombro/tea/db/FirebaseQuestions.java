@@ -12,11 +12,8 @@ import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import org.hombro.tea.question.code.CodingQuestion;
 import org.hombro.tea.question.code.Language;
-import org.hombro.tea.util.IOHelper;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -29,9 +26,9 @@ public class FirebaseQuestions implements QuestionStore {
     private static final String FIREBASE_KEY_ID = "FIREBASE_PRIVATE_KEY_ID";
     private static final String FIREBASE_KEY = "FIREBASE_PRIVATE_KEY";
     private static final String FIREBASE_NAME = "https://tea-service.firebaseio.com/";
-    private final File secretFile;
+    private final InputStream secretFile;
 
-    private File writeSecretFile() {
+    private InputStream getSecretFile() throws FileNotFoundException {
         JsonObject secret = new JsonObject()
                 .put("type", "service_account")
                 .put("project_id", "tea-service")
@@ -42,16 +39,15 @@ public class FirebaseQuestions implements QuestionStore {
                 .put("auth_provider_x509_cert_url", "https://www.googleapis.com/oauth2/v1/certs")
                 .put("client_x509_cert_url", "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-29nud%40tea-service.iam.gserviceaccount.com")
                 .put("private_key_id", System.getenv(FIREBASE_KEY_ID))
-                .put("private_key", System.getenv(FIREBASE_KEY));
-        return IOHelper.inMemoryFile(secret.encodePrettily());
+                .put("private_key", System.getenv(FIREBASE_KEY).replace("\\n", "\n"));
+        return new ByteArrayInputStream(secret.toString().getBytes());
     }
 
     public FirebaseQuestions() {
-        secretFile = writeSecretFile();
         try {
-            FileInputStream stream = new FileInputStream(secretFile);
+            secretFile = getSecretFile();
             FirebaseOptions options = new FirebaseOptions.Builder()
-                    .setCredential(FirebaseCredentials.fromCertificate(stream))
+                    .setCredential(FirebaseCredentials.fromCertificate(secretFile))
                     .setDatabaseUrl(FIREBASE_NAME)
                     .build();
             FirebaseApp.initializeApp(options);
@@ -68,8 +64,8 @@ public class FirebaseQuestions implements QuestionStore {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<String> questions = new ArrayList<>();
-                for(DataSnapshot l : dataSnapshot.getChildren()){
-                    for(DataSnapshot q : l.getChildren()){
+                for (DataSnapshot l : dataSnapshot.getChildren()) {
+                    for (DataSnapshot q : l.getChildren()) {
                         questions.add(l.getKey() + "/" + q.getKey());
                     }
                 }
@@ -85,9 +81,9 @@ public class FirebaseQuestions implements QuestionStore {
         Task<List<String>> t = taskCompletionSource.getTask();
         try {
             Tasks.await(t);
-            if(t.isSuccessful())
+            if (t.isSuccessful())
                 return t.getResult();
-            else{
+            else {
                 throw new RuntimeException("Did not read from firebase");
             }
         } catch (InterruptedException | ExecutionException e) {
@@ -117,7 +113,7 @@ public class FirebaseQuestions implements QuestionStore {
         Task<CodingQuestion> t = taskCompletionSource.getTask();
         try {
             Tasks.await(t);
-            if(t.isSuccessful())
+            if (t.isSuccessful())
                 return t.getResult();
             else
                 throw new RuntimeException("Did not read from firebase");

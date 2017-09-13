@@ -6,7 +6,6 @@ import org.apache.commons.io.IOUtils;
 import org.hombro.tea.question.code.Language;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -59,20 +58,5 @@ public class IOHelper {
 
     public static String getQuestionFromFile(String path) {
         return getFromFile(QUESTION_PATH + path.toLowerCase() + ".json");
-    }
-
-    public static File inMemoryFile(String text){
-        try {
-            File tmp = new File("tmp_" + System.nanoTime());
-            if(!tmp.createNewFile())
-                throw new RuntimeException("Failed to create the file");
-            tmp.deleteOnExit();
-            FileWriter writer = new FileWriter(tmp);
-            writer.write(text);
-            writer.close();
-            return tmp;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 }
