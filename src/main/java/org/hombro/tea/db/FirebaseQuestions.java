@@ -63,6 +63,7 @@ public class FirebaseQuestions implements QuestionStore {
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                logger.info("datachange detected for getQuestions");
                 List<String> questions = new ArrayList<>();
                 for (DataSnapshot l : dataSnapshot.getChildren()) {
                     for (DataSnapshot q : l.getChildren()) {
@@ -101,6 +102,7 @@ public class FirebaseQuestions implements QuestionStore {
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                logger.info("datachange detected on getQuestionInfo");
                 taskCompletionSource.setResult(dataSnapshot.getValue(CodingQuestion.class));
             }
 
