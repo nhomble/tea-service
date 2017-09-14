@@ -7,6 +7,7 @@ public enum Datatype {
     INTEGER,
     DOUBLE,
     STRING,
+    BOOLEAN,
     NONE;
 
     public String forLanguage(Language l) {
@@ -21,6 +22,9 @@ public enum Datatype {
                     break;
                 case STRING:
                     type = "String";
+                    break;
+                case BOOLEAN:
+                    type = "boolean";
                     break;
                 default:
                     type = "void";
