@@ -12,6 +12,16 @@ public class TestCaseResult {
     private Boolean isPublic;
     private List<String> argList;
     private List<String> prints;
+    private String expected;
+
+    public String getExpected() {
+        return expected;
+    }
+
+    public TestCaseResult setExpected(String expected) {
+        this.expected = expected;
+        return this;
+    }
 
     public List<String> getPrints() {
         return prints;
