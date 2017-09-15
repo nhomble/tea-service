@@ -14,7 +14,7 @@ public class TestCase {
         return getVisibility() == Visibility.PUBLIC;
     }
 
-    public Visibility getVisibility(){
+    private Visibility getVisibility(){
         return Visibility.valueOf(visibility.toUpperCase());
     }
 
