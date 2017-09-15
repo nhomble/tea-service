@@ -23,4 +23,8 @@ public class TestResponse {
     public TestResponseResult getTestResponseResult(){
         return testResponseResult;
     }
+
+    public String getOutput(){
+        return classUnderTestResponse.getOutput().toString();
+    }
 }

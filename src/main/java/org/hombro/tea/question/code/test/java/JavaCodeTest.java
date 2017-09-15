@@ -35,7 +35,8 @@ public class JavaCodeTest implements CodeTest {
                     .setPublic(test.isPublic())
                     .setArgList(argsList)
                     .setPrints(response.getPrints())
-                    .setExpected(test.getOut());
+                    .setExpected(test.getOut())
+                    .setOutput(response.getOutput());
         }).collect(Collectors.toList());
         return new CodeAnswerResult().setResults(results);
     }

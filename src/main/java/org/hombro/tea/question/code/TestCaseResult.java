@@ -13,6 +13,16 @@ public class TestCaseResult {
     private List<String> argList;
     private List<String> prints;
     private String expected;
+    private String output;
+
+    public String getOutput() {
+        return output;
+    }
+
+    public TestCaseResult setOutput(String output) {
+        this.output = output;
+        return this;
+    }
 
     public String getExpected() {
         return expected;
