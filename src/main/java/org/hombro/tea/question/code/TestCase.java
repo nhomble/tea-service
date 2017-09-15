@@ -1,5 +1,7 @@
 package org.hombro.tea.question.code;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 
 /**
@@ -8,13 +10,15 @@ import java.util.List;
 public class TestCase {
     private List<String> in;
     private String out;
+
+    @JsonIgnore
     private String visibility;
 
     public Boolean isPublic(){
         return getVisibility() == Visibility.PUBLIC;
     }
 
-    private Visibility getVisibility(){
+    public Visibility getVisibility(){
         return Visibility.valueOf(visibility.toUpperCase());
     }
 
