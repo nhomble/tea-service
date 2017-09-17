@@ -16,15 +16,16 @@ public class TestResponse {
         this.testResponseResult = testResponseResult;
     }
 
-    public List<String> getPrints(){
+    public List<String> getPrints() {
         return classUnderTestResponse.getPrints();
     }
 
-    public TestResponseResult getTestResponseResult(){
+    public TestResponseResult getTestResponseResult() {
         return testResponseResult;
     }
 
-    public String getOutput(){
-        return classUnderTestResponse.getOutput().toString();
+    public String getOutput() {
+        Object o = classUnderTestResponse.getOutput();
+        return o == null ? "" : o.toString();
     }
 }
