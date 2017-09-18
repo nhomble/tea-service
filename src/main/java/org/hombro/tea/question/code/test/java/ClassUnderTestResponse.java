@@ -33,10 +33,6 @@ public class ClassUnderTestResponse {
         return c;
     }
 
-    public static ClassUnderTestResponse fromTimeout(Exception e){
-        return fromException(e);
-    }
-
     public Object getOutput() {
         return output;
     }
